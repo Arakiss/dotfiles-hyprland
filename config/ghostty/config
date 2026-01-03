@@ -1,0 +1,265 @@
+# ==============================================================================
+#  ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗████████╗██╗   ██╗
+# ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝╚══██╔══╝╚██╗ ██╔╝
+# ██║  ███╗███████║██║   ██║███████╗   ██║      ██║    ╚████╔╝
+# ██║   ██║██╔══██║██║   ██║╚════██║   ██║      ██║     ╚██╔╝
+# ╚██████╔╝██║  ██║╚██████╔╝███████║   ██║      ██║      ██║
+#  ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝      ╚═╝      ╚═╝
+# ==============================================================================
+# Petru's Ghostty Configuration - Cyberpunk Dev Edition
+# Last updated: 2025-12-17
+# ==============================================================================
+
+# ==============================================================================
+# 🎨 THEME & COLORS
+# ==============================================================================
+# Tokyo Night: A clean, dark theme with vibrant syntax colors
+# Alternatives in ~/.config/ghostty/themes/: dracula, catppuccin, gruvbox
+# theme = TokyoNight
+theme = Snazzy
+
+# Selection highlight color (Tokyo Night palette)
+selection-background = #364a82
+
+# ==============================================================================
+# 🔤 TYPOGRAPHY
+# ==============================================================================
+# JetBrains Mono: Excellent for coding with clear distinctions
+# - Nerd Font version includes icons for starship, lsd, etc.
+# - Ligatures enabled for => -> !== === etc.
+font-family = JetBrainsMono Nerd Font Mono
+font-size = 13
+font-thicken = true
+
+# OpenType features:
+# +calt = Contextual alternates (ligatures like != become ≠)
+# +liga = Standard ligatures (fi, fl combinations)
+# To disable ligatures: -calt,-liga
+font-feature = +calt,+liga
+
+# Unicode & emoji rendering optimization
+adjust-box-thickness = 1
+adjust-cell-width = 0
+grapheme-width-method = unicode
+
+# ==============================================================================
+# 🪟 WINDOW & APPEARANCE
+# ==============================================================================
+# Padding creates breathing room around content
+window-padding-x = 16
+window-padding-y = 12
+
+# Window chrome (true = native macOS title bar)
+window-decoration = true
+
+# Save/restore window state between sessions
+window-save-state = always
+
+# New windows/tabs inherit working directory
+window-inherit-working-directory = true
+window-inherit-font-size = true
+
+# ==============================================================================
+# 🖱️ CURSOR
+# ==============================================================================
+# Styles: block, bar, underline
+cursor-style = bar
+cursor-opacity = 0.9
+
+# Cursor blinking (true/false)
+cursor-style-blink = true
+
+# ==============================================================================
+# 📊 SPLITS & TABS
+# ==============================================================================
+# Dim unfocused splits to highlight active pane
+# 0.0 = invisible, 1.0 = fully visible
+unfocused-split-opacity = 0.85
+
+# Fill color for unfocused splits (subtle darkening)
+unfocused-split-fill = #1a1b26
+
+# ==============================================================================
+# 🧽 BACKGROUND IMAGE - Bob Esponja Thinking
+# ==============================================================================
+# A nostalgic touch - SpongeBob contemplating life's mysteries
+# The image appears subtly behind the terminal content
+background-image = /Users/petrucosmindumitru/Pictures/spongebob-squarepants-thinking-4k-wallpaper-uhdpaper.com-512@5@j.jpg
+
+# Fit options: contain, cover, stretch, none
+# - cover: fills entire window, may crop edges
+# - contain: shows full image, may have letterboxing
+background-image-fit = cover
+
+# Opacity: 0.0 = invisible, 1.0 = fully visible
+# 0.25 = subtle background, text remains perfectly readable
+background-image-opacity = 0.25
+
+# ==============================================================================
+# ✨ SHADERS (Visual Effects)
+# ==============================================================================
+# Shaders add post-processing effects to the terminal
+# Available shaders in ~/.config/ghostty/shaders/:
+#
+# 🖥️ CRT/Retro:
+#   - crt.glsl              Classic CRT monitor effect
+#   - bettercrt.glsl        Improved CRT with more options
+#   - in-game-crt.glsl      Subtle CRT, good for daily use
+#   - retro-terminal.glsl   Old-school green phosphor look
+#
+# 🌟 Ambient/Visual:
+#   - bloom.glsl            Soft glow around bright text
+#   - starfield.glsl        Animated stars background
+#   - galaxy.glsl           Galaxy animation
+#   - matrix-hallway.glsl   Matrix-style effect
+#   - underwater.glsl       Underwater caustics
+#
+# 🎮 Fun/Experimental:
+#   - glitchy.glsl          Random glitch effects
+#   - fireworks.glsl        Fireworks animation
+#   - just-snow.glsl        Falling snow
+#
+# To enable a shader, uncomment ONE of these lines:
+# custom-shader = ~/.config/ghostty/shaders/in-game-crt.glsl
+# custom-shader = ~/.config/ghostty/shaders/bloom.glsl
+# custom-shader = ~/.config/ghostty/shaders/starfield.glsl
+
+# Enable shader animation (for animated shaders)
+# custom-shader-animation = true
+
+# ==============================================================================
+# ⚡ QUICK TERMINAL (Drop-down terminal)
+# ==============================================================================
+# Quick Terminal: A floating terminal that appears with a hotkey
+# Perfect for quick commands without leaving your current app
+#
+# Position options: top, bottom, left, right, center
+quick-terminal-position = top
+
+# Which screen to show on: main, mouse, macos-menu-bar
+quick-terminal-screen = main
+
+# Animation duration in seconds (0 = instant)
+quick-terminal-animation-duration = 0.12
+
+# Auto-hide when focus is lost
+quick-terminal-autohide = true
+
+# ==============================================================================
+# 🔗 LINKS & CLIPBOARD
+# ==============================================================================
+# Click on URLs to open them (Cmd+click on macOS)
+link-url = true
+
+# Allow programs to read/write clipboard (OSC 52)
+# Options: true, false, ask
+clipboard-read = ask
+clipboard-write = allow
+
+# ==============================================================================
+# 🐚 SHELL INTEGRATION
+# ==============================================================================
+# Shell integration enables:
+# - Semantic prompts (jump between prompts with Cmd+Up/Down)
+# - Working directory reporting (new tabs open in same dir)
+# - Better copy/paste at prompts
+shell-integration = zsh
+
+# Features to enable (all recommended)
+# cursor, sudo, title - most useful features
+shell-integration-features = cursor,sudo,title
+
+# ==============================================================================
+# 🎯 PERFORMANCE
+# ==============================================================================
+# Minimum contrast ratio for text readability
+# 1.0 = no adjustment, higher = more contrast
+minimum-contrast = 1.2
+
+# ==============================================================================
+# ⌨️ KEYBINDINGS
+# ==============================================================================
+# Format: keybind = <key>=<action>
+# Modifiers: ctrl, alt, shift, super (cmd on macOS)
+#
+# Available actions: https://ghostty.org/docs/config/keybind
+#
+# === Custom Keybindings ===
+
+# Shift+Enter: Send escaped newline (useful for multi-line input)
+keybind = shift+enter=text:\x1b\r
+
+# Quick split creation
+keybind = cmd+d=new_split:right
+keybind = cmd+shift+d=new_split:down
+
+# Navigate between splits
+keybind = cmd+alt+left=goto_split:left
+keybind = cmd+alt+right=goto_split:right
+keybind = cmd+alt+up=goto_split:top
+keybind = cmd+alt+down=goto_split:bottom
+
+# Resize splits
+keybind = cmd+ctrl+left=resize_split:left,20
+keybind = cmd+ctrl+right=resize_split:right,20
+keybind = cmd+ctrl+up=resize_split:up,20
+keybind = cmd+ctrl+down=resize_split:down,20
+
+# Equalize split sizes
+keybind = cmd+shift+e=equalize_splits
+
+# Close split/tab
+keybind = cmd+w=close_surface
+
+# Toggle fullscreen
+keybind = cmd+enter=toggle_fullscreen
+
+# Zoom current split (toggle)
+keybind = cmd+shift+z=toggle_split_zoom
+
+# Clear screen and scrollback
+keybind = cmd+k=clear_screen
+
+# Open config file
+keybind = cmd+,=open_config
+
+# Reload config
+keybind = cmd+shift+,=reload_config
+
+# Font size adjustments
+keybind = cmd+plus=increase_font_size:1
+keybind = cmd+minus=decrease_font_size:1
+keybind = cmd+0=reset_font_size
+
+# Quick Terminal toggle (global hotkey)
+keybind = global:ctrl+grave_accent=toggle_quick_terminal
+
+# ==============================================================================
+# 📝 NOTES & TIPS
+# ==============================================================================
+#
+# Reload config: Cmd+Shift+, (or from menu: Ghostty > Reload Configuration)
+#
+# Quick Terminal: Ctrl+` from anywhere to toggle dropdown terminal
+#
+# Split navigation:
+#   Cmd+D           = Split right
+#   Cmd+Shift+D     = Split down
+#   Cmd+Alt+Arrows  = Navigate splits
+#   Cmd+Ctrl+Arrows = Resize splits
+#   Cmd+Shift+Z     = Zoom current split
+#   Cmd+Shift+E     = Equalize all splits
+#
+# Shell Integration (with zsh):
+#   Cmd+Up/Down     = Jump between prompts
+#   Option+Click    = Move cursor to click position
+#
+# Shaders:
+#   To try different shaders, uncomment one custom-shader line above
+#   Mix shaders by adding multiple custom-shader lines
+#
+# Background Image:
+#   Change background-image-opacity (0.1-0.5 recommended)
+#   Try different images for different moods
+#
+# ==============================================================================

@@ -1,0 +1,19 @@
+# GitPlex: personal (github)
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile /Users/petrucosmindumitru/.ssh/id_ed25519
+    IdentitiesOnly yes
+    UseKeychain yes
+    AddKeysToAgent yes
+
+# GitPlex: azure (azure)
+Host ssh.dev.azure.com
+    HostName ssh.dev.azure.com
+    User git
+    IdentityFile /Users/petrucosmindumitru/.ssh/id_rsa_azure
+    IdentitiesOnly yes
+    HostKeyAlgorithms +ssh-rsa
+    PubkeyAcceptedAlgorithms +ssh-rsa
+    UseKeychain yes
+    AddKeysToAgent yes

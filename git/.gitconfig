@@ -1,0 +1,12 @@
+
+[includeIf "gitdir:/Users/petrucosmindumitru/Projects/personal/personal/"]
+    path = /Users/petrucosmindumitru/Projects/personal/personal/.gitconfig
+
+[includeIf "gitdir:/Users/petrucosmindumitru/Projects/work/work/"]
+    path = /Users/petrucosmindumitru/Projects/work/work/.gitconfig
+
+[includeIf "gitdir:/Users/petrucosmindumitru/Projects/azure/azure/"]
+    path = /Users/petrucosmindumitru/Projects/azure/azure/.gitconfig
+[user]
+	name = Petru Arakiss
+	email = petruarakiss@gmail.com

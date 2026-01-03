@@ -1,0 +1,37 @@
+# Sensitive data - NEVER commit
+*.pem
+*.key
+id_*
+*.pub
+
+# Backups
+*.backup
+*.bak
+*.old
+
+# Local overrides
+*.local
+*.local.*
+
+# macOS
+.DS_Store
+._*
+
+# Temporary
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+
+# Cache
+.cache/
+__pycache__/
+
+# History files
+.zsh_history
+.bash_history
+
+# Auth tokens
+hosts.yml
+session
