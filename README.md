@@ -29,6 +29,7 @@ This installs Homebrew, Oh-My-Zsh, Bun, fnm, mise, and all dotfiles.
 - Bun, Supabase, GitHub CLI shortcuts
 - Ghostty memory monitoring
 - zsh-autosuggestions & syntax-highlighting
+- **Productivity tools**: `pet` (workflows), `thefuck` (command corrections)
 - Local overrides via `~/.zshrc.local`
 
 ### Starship Prompt
@@ -41,6 +42,10 @@ This installs Homebrew, Oh-My-Zsh, Bun, fnm, mise, and all dotfiles.
 - Multiple presets (cyber, minimal, cozy, pro)
 - Custom shaders
 - Config scripts
+- **Workflow snippets** (`pet`) - Warp-like parameterized commands
+- **Session management** (`tmux`) - Curated config with Tokyo Night theme
+- **AI tools guide** - BYOK recommendations (Claude Code, aider, Gemini CLI)
+- **Terminal sharing** (`tmate`) - Share sessions via SSH URL
 
 ### Cursor Editor
 - Settings and keybindings synced
@@ -66,7 +71,8 @@ dotfiles/
 │   │   ├── bun.zsh
 │   │   ├── supabase.zsh
 │   │   ├── system.zsh
-│   │   └── tools.zsh       # lsd, bat, tldr
+│   │   ├── tools.zsh       # lsd, bat, tldr
+│   │   └── productivity.zsh # pet, thefuck
 │   ├── functions/
 │   │   └── ghostty.zsh
 │   └── tools/
@@ -77,6 +83,9 @@ dotfiles/
 ├── config/
 │   ├── starship/
 │   ├── ghostty/
+│   │   ├── ai/             # AI tools guide
+│   │   ├── workflows/      # pet snippets
+│   │   └── tmux/           # tmux config
 │   ├── atuin/
 │   ├── mise/
 │   └── cursor/
