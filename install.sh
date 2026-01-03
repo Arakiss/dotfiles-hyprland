@@ -41,6 +41,8 @@ echo ""
 echo "🐚 Setting up ZSH..."
 link_file "$DOTFILES_DIR/zsh/.zshrc" ~/.zshrc
 link_file "$DOTFILES_DIR/zsh/.zshenv" ~/.zshenv
+# Link entire zsh folder for modular config
+link_file "$DOTFILES_DIR/zsh" ~/.dotfiles-zsh
 
 # Git
 echo ""
@@ -89,6 +91,17 @@ for script in "$DOTFILES_DIR/scripts"/*; do
         chmod +x ~/.local/bin/"$name"
     fi
 done
+
+# Cursor
+echo ""
+echo "📝 Setting up Cursor..."
+CURSOR_CONFIG_DIR="$HOME/Library/Application Support/Cursor/User"
+if [ -d "$CURSOR_CONFIG_DIR" ]; then
+    link_file "$DOTFILES_DIR/config/cursor/settings.json" "$CURSOR_CONFIG_DIR/settings.json"
+    link_file "$DOTFILES_DIR/config/cursor/keybindings.json" "$CURSOR_CONFIG_DIR/keybindings.json"
+else
+    echo "  ⚠️ Cursor not installed. Skipping..."
+fi
 
 echo ""
 echo "✅ Dotfiles installed!"

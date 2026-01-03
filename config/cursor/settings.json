@@ -1,0 +1,14 @@
+{
+    "window.commandCenter": true,
+    "workbench.colorTheme": "Cursor Dark Midnight",
+    "cursor.cpp.enablePartialAccepts": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "explorer.confirmDelete": false,
+    "cursor.diffs.useCharacterLevelDiffs": true,
+    "cursor.terminal.usePreviewBox": true,
+    "explorer.compactFolders": false,
+    "git.detectSubmodules": true,
+    "git.detectSubmodulesLimit": 100,
+    "cursor.composer.shouldChimeAfterChatFinishes": true,
+    "biome.suggestInstallingGlobally": false
+}
