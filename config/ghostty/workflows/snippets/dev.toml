@@ -1,0 +1,146 @@
+# Development Workflow Snippets for pet
+# Usage: pet search "dev" or pw "npm"
+
+# === Node.js / npm ===
+
+[[snippets]]
+  description = "npm: Install and save as dev dependency"
+  command = "npm install -D <package>"
+  tag = ["npm", "node"]
+  output = ""
+
+[[snippets]]
+  description = "npm: Update all packages"
+  command = "npm update"
+  tag = ["npm", "node"]
+  output = ""
+
+[[snippets]]
+  description = "npm: Check outdated packages"
+  command = "npm outdated"
+  tag = ["npm", "node"]
+  output = ""
+
+[[snippets]]
+  description = "npm: Run script with environment"
+  command = "NODE_ENV=<env=production> npm run <script>"
+  tag = ["npm", "node"]
+  output = ""
+
+[[snippets]]
+  description = "npm: Clean install (remove node_modules)"
+  command = "rm -rf node_modules package-lock.json && npm install"
+  tag = ["npm", "node", "cleanup"]
+  output = ""
+
+# === Process Management ===
+
+[[snippets]]
+  description = "Find process using port"
+  command = "lsof -i :<port>"
+  tag = ["process", "port"]
+  output = ""
+
+[[snippets]]
+  description = "Kill process on port"
+  command = "kill -9 $(lsof -t -i:<port>)"
+  tag = ["process", "port", "kill"]
+  output = ""
+
+[[snippets]]
+  description = "Watch command output"
+  command = "watch -n <seconds=2> '<command>'"
+  tag = ["watch"]
+  output = ""
+
+# === File Operations ===
+
+[[snippets]]
+  description = "Find files larger than size"
+  command = "find . -type f -size +<size=100M>"
+  tag = ["files", "find"]
+  output = ""
+
+[[snippets]]
+  description = "Find files modified in last N days"
+  command = "find . -type f -mtime -<days=7>"
+  tag = ["files", "find"]
+  output = ""
+
+[[snippets]]
+  description = "Search text in files recursively"
+  command = "rg '<pattern>' --type <filetype=js>"
+  tag = ["search", "grep"]
+  output = ""
+
+[[snippets]]
+  description = "Replace text in files"
+  command = "find . -type f -name '*.<ext>' -exec sed -i '' 's/<old>/<new>/g' {} +"
+  tag = ["replace", "sed"]
+  output = ""
+
+[[snippets]]
+  description = "Count lines of code"
+  command = "find . -name '*.<ext>' | xargs wc -l | tail -1"
+  tag = ["stats"]
+  output = ""
+
+# === Network ===
+
+[[snippets]]
+  description = "Test HTTP endpoint"
+  command = "curl -I <url>"
+  tag = ["http", "curl"]
+  output = ""
+
+[[snippets]]
+  description = "POST JSON to endpoint"
+  command = "curl -X POST -H 'Content-Type: application/json' -d '<json_data>' <url>"
+  tag = ["http", "curl", "post"]
+  output = ""
+
+[[snippets]]
+  description = "Download file with progress"
+  command = "curl -L -o <output_file> <url>"
+  tag = ["http", "curl", "download"]
+  output = ""
+
+# === System ===
+
+[[snippets]]
+  description = "Disk usage summary"
+  command = "du -sh * | sort -hr | head -<n=20>"
+  tag = ["disk", "system"]
+  output = ""
+
+[[snippets]]
+  description = "Memory usage"
+  command = "top -l 1 | head -n 10"
+  tag = ["memory", "system"]
+  output = ""
+
+[[snippets]]
+  description = "List open files by process"
+  command = "lsof -c <process_name>"
+  tag = ["process", "system"]
+  output = ""
+
+# === SSH / Remote ===
+
+[[snippets]]
+  description = "SSH tunnel (local port forwarding)"
+  command = "ssh -L <local_port>:localhost:<remote_port> <user>@<host>"
+  tag = ["ssh", "tunnel"]
+  output = ""
+
+[[snippets]]
+  description = "Copy file to remote"
+  command = "scp <local_file> <user>@<host>:<remote_path>"
+  tag = ["ssh", "scp"]
+  output = ""
+
+[[snippets]]
+  description = "Sync directory to remote"
+  command = "rsync -avz --progress <local_dir>/ <user>@<host>:<remote_dir>/"
+  tag = ["ssh", "rsync"]
+  output = ""

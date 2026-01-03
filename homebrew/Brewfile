@@ -20,6 +20,13 @@ brew "uv"
 brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
+brew "zsh-completions"
+
+# Productivity Tools
+brew "thefuck"
+tap "knqyf263/pet"
+brew "knqyf263/pet/pet"
+brew "tmate"
 brew "stripe/stripe-cli/stripe"
 cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"

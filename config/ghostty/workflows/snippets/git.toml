@@ -1,0 +1,92 @@
+# Git Workflow Snippets for pet
+# Usage: pet search "git" or pw "git"
+
+[[snippets]]
+  description = "Interactive rebase last N commits"
+  command = "git rebase -i HEAD~<n=5>"
+  tag = ["git", "rebase"]
+  output = ""
+
+[[snippets]]
+  description = "Cherry-pick a commit from another branch"
+  command = "git cherry-pick <commit_hash>"
+  tag = ["git", "cherry-pick"]
+  output = ""
+
+[[snippets]]
+  description = "Find commit that introduced a bug (bisect)"
+  command = "git bisect start && git bisect bad && git bisect good <good_commit>"
+  tag = ["git", "bisect", "debug"]
+  output = ""
+
+[[snippets]]
+  description = "Stash changes with message"
+  command = "git stash push -m '<message>'"
+  tag = ["git", "stash"]
+  output = ""
+
+[[snippets]]
+  description = "Apply specific stash"
+  command = "git stash apply stash@{<n=0>}"
+  tag = ["git", "stash"]
+  output = ""
+
+[[snippets]]
+  description = "Create branch from stash"
+  command = "git stash branch <branch_name> stash@{<n=0>}"
+  tag = ["git", "stash", "branch"]
+  output = ""
+
+[[snippets]]
+  description = "Undo last commit (keep changes)"
+  command = "git reset --soft HEAD~1"
+  tag = ["git", "reset", "undo"]
+  output = ""
+
+[[snippets]]
+  description = "Amend last commit message"
+  command = "git commit --amend -m '<new_message>'"
+  tag = ["git", "amend"]
+  output = ""
+
+[[snippets]]
+  description = "Show commits by author"
+  command = "git log --author='<author>' --oneline"
+  tag = ["git", "log"]
+  output = ""
+
+[[snippets]]
+  description = "Find all commits containing a string"
+  command = "git log -S '<search_string>' --oneline"
+  tag = ["git", "log", "search"]
+  output = ""
+
+[[snippets]]
+  description = "Show file changes in a commit"
+  command = "git show --stat <commit_hash>"
+  tag = ["git", "show"]
+  output = ""
+
+[[snippets]]
+  description = "List branches merged into current"
+  command = "git branch --merged"
+  tag = ["git", "branch"]
+  output = ""
+
+[[snippets]]
+  description = "Delete local branches merged into main"
+  command = "git branch --merged main | grep -v 'main' | xargs -n 1 git branch -d"
+  tag = ["git", "cleanup", "branch"]
+  output = ""
+
+[[snippets]]
+  description = "Force push with lease (safer)"
+  command = "git push --force-with-lease origin <branch>"
+  tag = ["git", "push"]
+  output = ""
+
+[[snippets]]
+  description = "Create patch from last N commits"
+  command = "git format-patch -<n=1> HEAD"
+  tag = ["git", "patch"]
+  output = ""

@@ -1,0 +1,92 @@
+# Docker Workflow Snippets for pet
+# Usage: pet search "docker" or pw "docker"
+
+[[snippets]]
+  description = "Build image with tag"
+  command = "docker build -t <image_name>:<tag=latest> ."
+  tag = ["docker", "build"]
+  output = ""
+
+[[snippets]]
+  description = "Run container interactively"
+  command = "docker run -it --rm <image_name> /bin/sh"
+  tag = ["docker", "run"]
+  output = ""
+
+[[snippets]]
+  description = "Run container with port mapping"
+  command = "docker run -d -p <host_port>:<container_port> --name <container_name> <image_name>"
+  tag = ["docker", "run", "port"]
+  output = ""
+
+[[snippets]]
+  description = "Run container with volume mount"
+  command = "docker run -v $(pwd):<container_path=/app> <image_name>"
+  tag = ["docker", "run", "volume"]
+  output = ""
+
+[[snippets]]
+  description = "Execute command in running container"
+  command = "docker exec -it <container_name> /bin/sh"
+  tag = ["docker", "exec"]
+  output = ""
+
+[[snippets]]
+  description = "View container logs (follow)"
+  command = "docker logs -f <container_name>"
+  tag = ["docker", "logs"]
+  output = ""
+
+[[snippets]]
+  description = "Stop all running containers"
+  command = "docker stop $(docker ps -q)"
+  tag = ["docker", "stop", "cleanup"]
+  output = ""
+
+[[snippets]]
+  description = "Remove all stopped containers"
+  command = "docker container prune -f"
+  tag = ["docker", "cleanup"]
+  output = ""
+
+[[snippets]]
+  description = "Remove all unused images"
+  command = "docker image prune -a -f"
+  tag = ["docker", "cleanup"]
+  output = ""
+
+[[snippets]]
+  description = "Full Docker cleanup (containers, images, volumes)"
+  command = "docker system prune -a --volumes -f"
+  tag = ["docker", "cleanup"]
+  output = ""
+
+[[snippets]]
+  description = "Docker Compose up (rebuild)"
+  command = "docker compose up -d --build"
+  tag = ["docker", "compose"]
+  output = ""
+
+[[snippets]]
+  description = "Docker Compose down (with volumes)"
+  command = "docker compose down -v"
+  tag = ["docker", "compose"]
+  output = ""
+
+[[snippets]]
+  description = "Docker Compose logs"
+  command = "docker compose logs -f <service_name>"
+  tag = ["docker", "compose", "logs"]
+  output = ""
+
+[[snippets]]
+  description = "Copy file from container"
+  command = "docker cp <container_name>:<container_path> <local_path>"
+  tag = ["docker", "copy"]
+  output = ""
+
+[[snippets]]
+  description = "Inspect container"
+  command = "docker inspect <container_name> | jq '.[0].NetworkSettings'"
+  tag = ["docker", "inspect"]
+  output = ""
