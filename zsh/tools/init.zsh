@@ -55,15 +55,8 @@ if command -v mise &>/dev/null; then
 fi
 
 # --- fnm (fast Node manager) ---
-if command -v fnm &>/dev/null; then
-    _lazy_fnm_init() {
-        eval "$(fnm env --use-on-cd)"
-    }
-    _lazy_load "fnm" "_lazy_fnm_init"
-    _lazy_load "node" "_lazy_fnm_init"
-    _lazy_load "npm" "_lazy_fnm_init"
-    _lazy_load "npx" "_lazy_fnm_init"
-fi
+# Loaded immediately because node is needed by many tools (Claude, etc.)
+command -v fnm &>/dev/null && eval "$(fnm env --use-on-cd)"
 
 # =============================================================================
 # DEFERRED LOADING (load after prompt, in background)
