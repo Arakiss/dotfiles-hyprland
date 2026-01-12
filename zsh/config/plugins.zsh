@@ -21,7 +21,5 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# Docker CLI completions
+# Docker CLI completions (compinit already called by oh-my-zsh)
 fpath=($HOME/.docker/completions $fpath)
-autoload -Uz compinit
-compinit

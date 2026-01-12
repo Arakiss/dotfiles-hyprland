@@ -2,7 +2,7 @@
 Host github.com
     HostName github.com
     User git
-    IdentityFile /Users/petrucosmindumitru/.ssh/id_ed25519
+    IdentityFile ~/.ssh/id_ed25519_personal_github
     IdentitiesOnly yes
     UseKeychain yes
     AddKeysToAgent yes
@@ -11,7 +11,7 @@ Host github.com
 Host ssh.dev.azure.com
     HostName ssh.dev.azure.com
     User git
-    IdentityFile /Users/petrucosmindumitru/.ssh/id_rsa_azure
+    IdentityFile ~/.ssh/id_rsa_azure_devops
     IdentitiesOnly yes
     HostKeyAlgorithms +ssh-rsa
     PubkeyAcceptedAlgorithms +ssh-rsa
