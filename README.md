@@ -52,8 +52,23 @@ This installs Homebrew, Oh-My-Zsh, Bun, fnm, mise, and all dotfiles.
 - Auto-skipped if Cursor not installed
 
 ### Homebrew
-- Essential packages in `Brewfile`
-- Install with: `brew bundle --file=homebrew/Brewfile`
+
+**CLI Tools (31+):**
+- Shell: `zsh-autosuggestions`, `zsh-syntax-highlighting`, `zsh-completions`
+- Modern CLI: `lsd`, `bat`, `fzf`, `zoxide`, `atuin`, `eza`, `starship`
+- Dev: `gh`, `mise`, `fnm`, `uv`, `tmux`, `ast-grep`
+- Database: `supabase`, `libpq`
+- Image: `imagemagick`, `jpegoptim`, `pngquant`
+- Docs: `pandoc`, `epubcheck`, `tldr`
+- Productivity: `thefuck`, `pet`, `tmate`
+
+**Dev Apps (6):**
+- Docker, Ghostty, Warp, Google Chrome, Obsidian, Claude
+
+**Fonts:**
+- JetBrains Mono + Nerd Font
+
+Install with: `brew bundle --file=homebrew/Brewfile`
 
 ## Structure
 
@@ -142,6 +157,13 @@ echo '[user]
 - macOS
 - Homebrew
 - [Nerd Font](https://www.nerdfonts.com/) (JetBrains Mono recommended)
+
+## Related Repos
+
+| Repo | Description |
+|------|-------------|
+| [Arakiss/claude-config](https://github.com/Arakiss/claude-config) | Claude Code config (CLAUDE.md, skills, commands) |
+| [Arakiss/lisa](https://github.com/Arakiss/lisa) | Lisa plugin for iterative loops |
 
 ---
 
