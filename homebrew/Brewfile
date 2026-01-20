@@ -39,8 +39,19 @@ tap "knqyf263/pet"
 brew "knqyf263/pet/pet"
 brew "tmate"
 brew "stripe/stripe-cli/stripe"
+# Fonts
 cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
+
+# Dev Core Apps
+cask "docker"
+cask "ghostty"
+cask "warp"
+cask "google-chrome"
+cask "obsidian"
+cask "claude"
+
+# VS Code / Cursor Extensions
 vscode "anysphere.cursorpyright"
 vscode "biomejs.biome"
 vscode "github.vscode-github-actions"
