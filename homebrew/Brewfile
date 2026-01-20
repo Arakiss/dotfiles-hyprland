@@ -1,4 +1,6 @@
 tap "stripe/stripe-cli"
+tap "supabase/tap"
+
 brew "ast-grep"
 brew "atuin"
 brew "azure-cli"
@@ -21,6 +23,15 @@ brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 brew "zsh-completions"
+
+# Database & Image Tools
+brew "epubcheck"
+brew "imagemagick"
+brew "jpegoptim"
+brew "libpq"
+brew "pandoc"
+brew "pngquant"
+brew "supabase/tap/supabase"
 
 # Productivity Tools
 brew "thefuck"
