@@ -113,10 +113,7 @@ dotfiles/
 │   └── ssh_config.template   # Template (auto-expands $HOME)
 ├── config/
 │   ├── starship/
-│   ├── ghostty/
-│   │   ├── ai/               # AI tools guide
-│   │   ├── workflows/        # pet snippets
-│   │   └── tmux/             # tmux config
+│   ├── ghostty/              # Symlink → ~/ghostty-warp (separate repo)
 │   ├── atuin/
 │   ├── mise/
 │   └── cursor/
@@ -182,6 +179,7 @@ echo '[user]
 
 | Repo | Description |
 |------|-------------|
+| [Arakiss/ghostty-warp](https://github.com/Arakiss/ghostty-warp) | Ghostty terminal config (cloned automatically by install.sh) |
 | [Arakiss/claude-config](https://github.com/Arakiss/claude-config) | Claude Code config (CLAUDE.md, skills, commands) |
 | [Arakiss/lisa](https://github.com/Arakiss/lisa) | Lisa plugin for iterative loops |
 
