@@ -144,17 +144,33 @@ mkdir -p "$HOME/.config"
 link_file "$DOTFILES_DIR/config/starship/starship.toml" "$HOME/.config/starship.toml"
 
 # =============================================================================
-# Ghostty Terminal
+# Ghostty Terminal (via ghostty-warp repo)
 # =============================================================================
 echo ""
 echo "Setting up Ghostty..."
-mkdir -p "$HOME/.config/ghostty"
-for file in "$DOTFILES_DIR/config/ghostty"/*; do
-    if [ -f "$file" ]; then
-        name=$(basename "$file")
-        link_file "$file" "$HOME/.config/ghostty/$name"
+GHOSTTY_WARP_DIR="$HOME/ghostty-warp"
+
+# Clone ghostty-warp if it doesn't exist
+if [ ! -d "$GHOSTTY_WARP_DIR" ]; then
+    echo "  Cloning ghostty-warp repository..."
+    git clone git@github.com:Arakiss/ghostty-warp.git "$GHOSTTY_WARP_DIR" || \
+    git clone https://github.com/Arakiss/ghostty-warp.git "$GHOSTTY_WARP_DIR"
+fi
+
+# Create symlink to ghostty-warp
+if [ -d "$GHOSTTY_WARP_DIR" ]; then
+    backup_if_exists "$HOME/.config/ghostty"
+    ln -sf "$GHOSTTY_WARP_DIR" "$HOME/.config/ghostty"
+    echo -e "  ${GREEN}Linked${NC} ~/.config/ghostty -> ghostty-warp"
+
+    # Install ghostty-warp dependencies if script exists
+    if [ -f "$GHOSTTY_WARP_DIR/install-deps.sh" ]; then
+        echo "  Installing ghostty-warp dependencies..."
+        "$GHOSTTY_WARP_DIR/install-deps.sh" || true
     fi
-done
+else
+    echo -e "  ${YELLOW}ghostty-warp not found. Skipping...${NC}"
+fi
 
 # =============================================================================
 # Atuin (Shell History)
