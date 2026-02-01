@@ -122,9 +122,9 @@ elif [ -f "$DOTFILES_DIR/git/.gitconfig" ]; then
 fi
 
 # Create project directories structure
-mkdir -p "$HOME/Projects/personal"
+mkdir -p "$HOME/Projects/personal/indie-hackers"
+mkdir -p "$HOME/Projects/personal/open-source"
 mkdir -p "$HOME/Projects/work"
-mkdir -p "$HOME/Projects/azure"
 
 # =============================================================================
 # ZSH Configuration
