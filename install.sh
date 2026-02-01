@@ -217,6 +217,46 @@ else
 fi
 
 # =============================================================================
+# Claude Code Configuration (via claude-config repo)
+# =============================================================================
+echo ""
+echo "Setting up Claude Code..."
+CLAUDE_CONFIG_DIR="$HOME/claude-config"
+
+# Clone claude-config if it doesn't exist
+if [ ! -d "$CLAUDE_CONFIG_DIR" ]; then
+    echo "  Cloning claude-config repository..."
+    git clone git@github.com:Arakiss/claude-config.git "$CLAUDE_CONFIG_DIR" || \
+    git clone https://github.com/Arakiss/claude-config.git "$CLAUDE_CONFIG_DIR"
+fi
+
+# Create symlink to claude-config
+if [ -d "$CLAUDE_CONFIG_DIR" ]; then
+    backup_if_exists "$HOME/.claude"
+    ln -sf "$CLAUDE_CONFIG_DIR" "$HOME/.claude"
+    echo -e "  ${GREEN}Linked${NC} ~/.claude -> claude-config"
+
+    # Clone Lisa plugin if not exists
+    LISA_DIR="$CLAUDE_CONFIG_DIR/plugins/local/plugins/lisa"
+    if [ ! -d "$LISA_DIR" ]; then
+        echo "  Cloning Lisa plugin..."
+        mkdir -p "$CLAUDE_CONFIG_DIR/plugins/local/plugins"
+        git clone git@github.com:Arakiss/lisa.git "$LISA_DIR" || \
+        git clone https://github.com/Arakiss/lisa.git "$LISA_DIR"
+
+        # Register Lisa plugin
+        cat > "$CLAUDE_CONFIG_DIR/plugins/local/plugins.json" << 'EOF'
+{
+  "plugins": ["lisa"]
+}
+EOF
+        echo -e "  ${GREEN}Lisa plugin installed${NC}"
+    fi
+else
+    echo -e "  ${YELLOW}claude-config not found. Skipping...${NC}"
+fi
+
+# =============================================================================
 # macOS Defaults (optional)
 # =============================================================================
 if [ -f "$DOTFILES_DIR/macos/defaults.sh" ]; then

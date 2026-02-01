@@ -117,6 +117,9 @@ dotfiles/
 │   ├── atuin/
 │   ├── mise/
 │   └── cursor/
+│
+│   # External repos (cloned by install.sh):
+│   # ~/.claude → ~/claude-config (Claude Code config)
 ├── scripts/
 │   ├── update.sh             # Sync dotfiles
 │   └── macos-defaults.sh     # System preferences
