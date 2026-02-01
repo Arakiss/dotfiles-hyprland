@@ -42,6 +42,7 @@ brew "stripe/stripe-cli/stripe"
 # Fonts
 cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
+cask "font-monaspace-nerd-font"
 
 # Productivity / Utilities
 cask "domzilla-caffeine"
