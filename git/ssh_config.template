@@ -1,0 +1,20 @@
+# GitHub (personal)
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile {{HOME}}/.ssh/id_ed25519
+    IdentitiesOnly yes
+    UseKeychain yes
+    AddKeysToAgent yes
+    StrictHostKeyChecking accept-new
+
+# Azure DevOps (if needed)
+Host ssh.dev.azure.com
+    HostName ssh.dev.azure.com
+    User git
+    IdentityFile {{HOME}}/.ssh/id_rsa_azure_devops
+    IdentitiesOnly yes
+    HostKeyAlgorithms +ssh-rsa
+    PubkeyAcceptedAlgorithms +ssh-rsa
+    UseKeychain yes
+    AddKeysToAgent yes

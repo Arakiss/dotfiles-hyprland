@@ -1,0 +1,34 @@
+[includeIf "gitdir:{{HOME}}/Projects/personal/"]
+    path = {{HOME}}/Projects/personal/.gitconfig
+
+[includeIf "gitdir:{{HOME}}/Projects/work/"]
+    path = {{HOME}}/Projects/work/.gitconfig
+
+[includeIf "gitdir:{{HOME}}/Projects/azure/"]
+    path = {{HOME}}/Projects/azure/.gitconfig
+
+[user]
+    name = Petru Arakiss
+    email = petruarakiss@gmail.com
+
+[init]
+    defaultBranch = main
+
+[core]
+    editor = code --wait
+    autocrlf = input
+
+[pull]
+    rebase = true
+
+[push]
+    autoSetupRemote = true
+
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+    lg = log --oneline --graph --decorate
+    last = log -1 HEAD
+    unstage = reset HEAD --

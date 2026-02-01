@@ -1,8 +1,31 @@
 # Dotfiles
 
-Personal shell configuration for syncing across machines.
+Personal shell configuration for syncing across machines. **Automatically adapts to any machine** - no hardcoded paths.
 
-## Quick Install
+## New Machine Setup (Recommended)
+
+For a completely fresh Mac, run:
+
+```bash
+# Option 1: One-liner (after Xcode CLI tools)
+curl -fsSL https://raw.githubusercontent.com/Arakiss/dotfiles/main/bootstrap.sh | bash
+
+# Option 2: Manual
+git clone https://github.com/Arakiss/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+./bootstrap.sh
+```
+
+The bootstrap script handles everything:
+- Xcode Command Line Tools
+- Homebrew installation
+- SSH key generation (and prompts to add to GitHub)
+- Dotfiles installation
+- All Homebrew packages
+
+## Quick Install (Existing Setup)
+
+If you already have Homebrew and SSH configured:
 
 ```bash
 git clone git@github.com:Arakiss/dotfiles.git ~/dotfiles
@@ -10,16 +33,7 @@ cd ~/dotfiles
 ./install.sh
 ```
 
-## New Machine Bootstrap
-
-For a fresh macOS install, run the full bootstrap:
-```bash
-curl -fsSL https://raw.githubusercontent.com/Arakiss/dotfiles/main/scripts/bootstrap.sh | bash
-```
-
-This installs Homebrew, Oh-My-Zsh, Bun, fnm, mise, and all dotfiles.
-
-## Contents
+## What's Included
 
 ### ZSH (Modular)
 - **Modular structure** - Easy to extend and maintain
@@ -74,51 +88,59 @@ Install with: `brew bundle --file=homebrew/Brewfile`
 
 ```
 dotfiles/
+├── bootstrap.sh              # NEW MACHINE: Full setup
+├── install.sh                # Existing machine: Link dotfiles
 ├── zsh/
-│   ├── .zshrc              # Main loader
+│   ├── .zshrc                # Main loader
 │   ├── .zshenv
 │   ├── config/
-│   │   ├── options.zsh     # ZSH options & history
-│   │   └── plugins.zsh     # Oh-My-Zsh setup
+│   │   ├── options.zsh       # ZSH options & history
+│   │   └── plugins.zsh       # Oh-My-Zsh setup
 │   ├── aliases/
 │   │   ├── docker.zsh
 │   │   ├── git.zsh
 │   │   ├── bun.zsh
 │   │   ├── supabase.zsh
 │   │   ├── system.zsh
-│   │   ├── tools.zsh       # lsd, bat, tldr
-│   │   └── productivity.zsh # pet, thefuck
+│   │   ├── tools.zsh         # lsd, bat, tldr
+│   │   └── productivity.zsh  # pet, thefuck
 │   ├── functions/
 │   │   └── ghostty.zsh
 │   └── tools/
-│       └── init.zsh        # Tool initialization
+│       └── init.zsh          # Tool initialization
 ├── git/
-│   ├── .gitconfig
-│   └── ssh_config
+│   ├── .gitconfig.template   # Template (auto-expands $HOME)
+│   └── ssh_config.template   # Template (auto-expands $HOME)
 ├── config/
 │   ├── starship/
 │   ├── ghostty/
-│   │   ├── ai/             # AI tools guide
-│   │   ├── workflows/      # pet snippets
-│   │   └── tmux/           # tmux config
+│   │   ├── ai/               # AI tools guide
+│   │   ├── workflows/        # pet snippets
+│   │   └── tmux/             # tmux config
 │   ├── atuin/
 │   ├── mise/
 │   └── cursor/
 ├── scripts/
-│   ├── bootstrap.sh        # New machine setup
-│   ├── update.sh           # Sync dotfiles
-│   └── macos-defaults.sh   # System preferences
-├── homebrew/
-│   └── Brewfile
-└── install.sh
+│   ├── update.sh             # Sync dotfiles
+│   └── macos-defaults.sh     # System preferences
+└── homebrew/
+    └── Brewfile
 ```
 
 ## Scripts
 
 ### bootstrap.sh
-Full setup for a new machine. Installs Homebrew, Oh-My-Zsh, Bun, fnm, mise, and runs `install.sh`.
+Full setup for a new machine. Handles:
+1. Xcode Command Line Tools
+2. Homebrew installation
+3. SSH key generation
+4. Cloning this repo
+5. Running install.sh
 
-### update.sh
+### install.sh
+Links all dotfiles and installs Homebrew packages. Uses templates to automatically adapt paths to your machine.
+
+### scripts/update.sh
 Sync dotfiles between machines:
 ```bash
 ./scripts/update.sh          # Pull + push (default)
@@ -128,35 +150,33 @@ Sync dotfiles between machines:
 ./scripts/update.sh backup   # Backup current configs
 ```
 
-### macos-defaults.sh
+### scripts/macos-defaults.sh
 Developer-friendly macOS settings (run once after fresh install):
 ```bash
 ./scripts/macos-defaults.sh
 ```
 Configures keyboard speed, Finder, Dock, trackpad, screenshots, and more.
 
-## Manual Steps
+## Multi-Machine Support
 
-### SSH Keys
-Generate new keys on each machine:
-```bash
-ssh-keygen -t ed25519 -C "your@email.com"
-```
+The dotfiles automatically detect your `$HOME` directory and adapt:
+- **Templates** (`*.template`) are processed during install
+- **No hardcoded paths** - works on any Mac username
+- **SSH keys** are generated per-machine if missing
 
 ### Work-Specific Git
-Create work-specific config:
+Create work-specific config in your projects directory:
 ```bash
-# In your work projects directory
+mkdir -p ~/Projects/work
 echo '[user]
     name = Your Work Name
-    email = work@company.com' > .gitconfig
+    email = work@company.com' > ~/Projects/work/.gitconfig
 ```
 
 ## Requirements
 
-- macOS
-- Homebrew
-- [Nerd Font](https://www.nerdfonts.com/) (JetBrains Mono recommended)
+- macOS (Apple Silicon or Intel)
+- [Nerd Font](https://www.nerdfonts.com/) (JetBrains Mono included in Brewfile)
 
 ## Related Repos
 
@@ -167,4 +187,4 @@ echo '[user]
 
 ---
 
-**Updated:** January 2026
+**Updated:** February 2026
