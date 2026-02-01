@@ -43,6 +43,9 @@ brew "stripe/stripe-cli/stripe"
 cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
 
+# Productivity / Utilities
+cask "domzilla-caffeine"
+
 # Dev Core Apps
 cask "docker"
 cask "ghostty"
