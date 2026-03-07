@@ -85,10 +85,52 @@ A curated, modular desktop environment built around the Tokyo Night aesthetic wi
 └── install-packages.sh     # Package installer
 ```
 
+## Dependencies
+
+### Core (required)
+
+```bash
+paru -S --needed \
+  hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
+  waybar mako rofi-wayland swaybg swayosd-git \
+  ghostty alacritty \
+  grim slurp satty wl-clipboard cliphist \
+  zsh starship zoxide fzf zsh-autosuggestions zsh-syntax-highlighting \
+  ttf-jetbrains-mono-nerd otf-font-awesome \
+  neovim tmux lazygit btop fastfetch \
+  bat eza fd dust ripgrep jq gum tldr \
+  keychain
+```
+
+### Hyprland plugins (optional)
+
+```bash
+# hyprexpo requires cmake and cpio to build
+paru -S --needed cmake cpio
+hyprpm update
+hyprpm add https://github.com/hyprwm/hyprland-plugins
+hyprpm enable hyprexpo
+```
+
+### Dev tools (optional)
+
+```bash
+paru -S --needed \
+  python-pip python-virtualenv python-poetry uv ruff \
+  python-pytorch-opt-cuda python-torchvision-cuda cuda cudnn \
+  docker docker-buildx docker-compose kubectl helm \
+  github-cli google-chrome
+```
+
+### Runtime managers (installed via official curl)
+
+- **bun** — `curl -fsSL https://bun.sh/install | bash`
+- **fnm** — `curl -fsSL https://fnm.vercel.app/install | bash`
+
 ## Installation
 
 ```bash
-git clone git@github.com:Arakiss/dotfiles.git ~/.dotfiles
+git clone git@github.com:Arakiss/dotfiles-hyprland.git ~/.dotfiles
 cd ~/.dotfiles
 bash install-packages.sh    # Install all packages
 ./bin/omarchy-install        # Symlink everything
