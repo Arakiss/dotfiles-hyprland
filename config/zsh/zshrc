@@ -17,9 +17,6 @@ setopt COMPLETE_IN_WORD
 setopt NO_BEEP
 setopt INTERACTIVE_COMMENTS
 
-# Vi mode (optional, comment out if you prefer emacs mode)
-# bindkey -v
-
 # Emacs keybindings (default, more intuitive)
 bindkey -e
 
@@ -85,29 +82,51 @@ alias open='xdg-open'
 alias cls='clear'
 alias ff='fzf --preview "bat --color=always --style=numbers {}" --bind "enter:become(nvim {})"'
 
+# Screenshots (Hyprland)
+alias ss='grim -g "$(slurp)" - | wl-copy'
+alias ssf='grim - | wl-copy'
+alias sse='grim -g "$(slurp)" /tmp/screenshot.png && satty -f /tmp/screenshot.png 2>/dev/null || xdg-open /tmp/screenshot.png'
+
 # PATH
 export PATH="$HOME/.local/bin:$PATH"
+
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+[ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
+
+# fnm (Fast Node Manager)
+FNM_PATH="$HOME/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+    export PATH="$FNM_PATH:$PATH"
+    eval "$(fnm env)"
+fi
+
+# SSH agent via keychain — asks passphrase ONCE, remembers across sessions
+if command -v keychain &>/dev/null; then
+    eval "$(keychain --eval --quiet --noask id_ed25519)"
+fi
+
+# CUDA
+[[ -f /etc/profile.d/cuda.sh ]] && source /etc/profile.d/cuda.sh
+
+# fzf
+[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
+[[ -f /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
 
 # Starship prompt
 if command -v starship &>/dev/null; then
     eval "$(starship init zsh)"
 fi
 
-# Zoxide
-if command -v zoxide &>/dev/null; then
-    eval "$(zoxide init zsh)"
-    alias cd='z'
-fi
-
-# fzf
-[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
-[[ -f /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
-
-# CUDA
-[[ -f /etc/profile.d/cuda.sh ]] && source /etc/profile.d/cuda.sh
-
 # Fastfetch on first shell
 if [[ -z "$OMARCHY_GREETED" ]]; then
     export OMARCHY_GREETED=1
     command -v fastfetch &>/dev/null && fastfetch
+fi
+
+# Zoxide — MUST be last (see https://github.com/ajeetdsouza/zoxide/issues)
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init zsh)"
+    alias cd='z'
 fi

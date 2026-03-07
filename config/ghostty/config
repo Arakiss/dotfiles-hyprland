@@ -1,37 +1,94 @@
-# Dynamic theme colors
+# Ghostty Configuration — CachyOS/Hyprland Edition
+# Managed via ~/.dotfiles, symlinked to ~/.config/ghostty
+
+# Dynamic theme colors (omarchy theme system)
 config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
 
 # Font
 font-family = "JetBrainsMono Nerd Font"
 font-style = Regular
-font-size = 9
+font-size = 11
+font-thicken = true
+
+# Ligatures
+font-feature = +calt,+liga
+
+# Unicode/box-drawing rendering
+grapheme-width-method = unicode
 
 # Window
 window-theme = ghostty
 window-padding-x = 14
 window-padding-y = 14
-confirm-close-surface=false
+confirm-close-surface = false
 resize-overlay = never
 gtk-toolbar-style = flat
 
-# Cursor styling
-cursor-style = "block"
+# Cursor
+cursor-style = block
 cursor-style-blink = false
 
-# Cursor styling + SSH session terminfo
-# (all shell integration options must be passed together)
+# Shell integration (zsh, no cursor override)
 shell-integration-features = no-cursor,ssh-env
 
-# Keyboard bindings
+# Visual polish
+minimum-contrast = 1.1
+
+# Slowdown mouse scrolling
+mouse-scroll-multiplier = 0.95
+
+# Fix Hyprland rendering performance
+# https://github.com/ghostty-org/ghostty/discussions/3224
+async-backend = epoll
+
+# ==============================================
+# Keyboard Bindings — Linux/Hyprland
+# ==============================================
+
+# Clipboard
 keybind = shift+insert=paste_from_clipboard
 keybind = control+insert=copy_to_clipboard
+keybind = ctrl+shift+c=copy_to_clipboard
+keybind = ctrl+shift+v=paste_from_clipboard
+
+# Font size control
+keybind = ctrl+equal=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+0=reset_font_size
+
+# Navigation
+keybind = ctrl+shift+k=clear_screen
+keybind = ctrl+shift+t=new_tab
+keybind = ctrl+shift+w=close_surface
+
+# Split management
+keybind = ctrl+shift+d=new_split:right
+keybind = ctrl+shift+o=new_split:down
+keybind = ctrl+shift+z=toggle_split_zoom
+
+# Split navigation
+keybind = ctrl+shift+arrow_left=goto_split:left
+keybind = ctrl+shift+arrow_right=goto_split:right
+keybind = ctrl+shift+arrow_up=goto_split:up
+keybind = ctrl+shift+arrow_down=goto_split:down
+
+# Split resize
 keybind = super+control+shift+alt+arrow_down=resize_split:down,100
 keybind = super+control+shift+alt+arrow_up=resize_split:up,100
 keybind = super+control+shift+alt+arrow_left=resize_split:left,100
 keybind = super+control+shift+alt+arrow_right=resize_split:right,100
 
-# Slowdown mouse scrolling
-mouse-scroll-multiplier = 0.95
+# Tab navigation
+keybind = ctrl+shift+1=goto_tab:1
+keybind = ctrl+shift+2=goto_tab:2
+keybind = ctrl+shift+3=goto_tab:3
+keybind = ctrl+shift+4=goto_tab:4
+keybind = ctrl+shift+5=goto_tab:5
+keybind = ctrl+shift+6=goto_tab:6
+keybind = ctrl+shift+7=goto_tab:7
+keybind = ctrl+shift+8=goto_tab:8
+keybind = ctrl+shift+9=goto_tab:9
 
-# Fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
-async-backend = epoll
+# Quick tab cycling
+keybind = ctrl+tab=next_tab
+keybind = ctrl+shift+tab=previous_tab
