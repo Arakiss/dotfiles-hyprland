@@ -8,82 +8,110 @@ DOTFILES="$HOME/.dotfiles"
 FORCE="${1:-}"
 BACKUP_DIR="$HOME/.config-backup/$(date +%Y%m%d_%H%M%S)"
 
-link_config() {
+link_file() {
     local src="$1"
     local dst="$2"
 
     if [[ -e "$dst" ]] && [[ ! -L "$dst" ]]; then
         if [[ "$FORCE" != "--force" ]]; then
-            echo "  Backing up existing: $dst"
+            echo "  Backing up: $dst"
             mkdir -p "$(dirname "$BACKUP_DIR/${dst#$HOME/}")"
             mv "$dst" "$BACKUP_DIR/${dst#$HOME/}"
         else
             rm -rf "$dst"
         fi
+    elif [[ -L "$dst" ]]; then
+        rm -f "$dst"
     fi
 
     mkdir -p "$(dirname "$dst")"
     ln -sf "$src" "$dst"
-    echo "  Linked: $dst -> $src"
+    echo "  Linked: $dst"
 }
 
-echo "Installing Omarchy dotfiles..."
+link_dir() {
+    local src="$1"
+    local dst="$2"
+    link_file "$src" "$dst"
+}
+
+echo "=== Installing Omarchy Dotfiles ==="
 echo ""
 
-# Config directories to symlink
-configs=(
-    "hypr"
-    "waybar"
-    "mako"
-    "rofi"
-    "alacritty"
-    "kitty"
-    "tmux"
-    "btop"
-    "fastfetch"
-)
-
-for config in "${configs[@]}"; do
-    if [[ -d "$DOTFILES/config/$config" ]]; then
-        echo "[$config]"
-        link_config "$DOTFILES/config/$config" "$HOME/.config/$config"
-    fi
+# Hyprland - symlink individual files (keeps monitors-local.conf local)
+echo "[hypr]"
+mkdir -p "$HOME/.config/hypr"
+for f in "$DOTFILES/config/hypr/"*.conf; do
+    link_file "$f" "$HOME/.config/hypr/$(basename "$f")"
 done
+# Generate monitors-local.conf if missing
+if [[ ! -f "$HOME/.config/hypr/monitors-local.conf" ]]; then
+    echo "  Generating monitors-local.conf..."
+    bash "$DOTFILES/bin/omarchy-monitors-setup" 2>/dev/null || echo "# Fallback" > "$HOME/.config/hypr/monitors-local.conf"
+fi
 
-# Starship config (goes to ~/.config/starship.toml)
+# Config directories to symlink as a whole
+echo "[waybar]"
+link_dir "$DOTFILES/config/waybar" "$HOME/.config/waybar"
+echo "[mako]"
+link_dir "$DOTFILES/config/mako" "$HOME/.config/mako"
+echo "[rofi]"
+link_dir "$DOTFILES/config/rofi" "$HOME/.config/rofi"
+echo "[alacritty]"
+link_dir "$DOTFILES/config/alacritty" "$HOME/.config/alacritty"
+echo "[kitty]"
+link_dir "$DOTFILES/config/kitty" "$HOME/.config/kitty"
+echo "[tmux]"
+link_dir "$DOTFILES/config/tmux" "$HOME/.config/tmux"
+echo "[btop]"
+link_dir "$DOTFILES/config/btop" "$HOME/.config/btop"
+echo "[fastfetch]"
+link_dir "$DOTFILES/config/fastfetch" "$HOME/.config/fastfetch"
+
+# Starship
 echo "[starship]"
-link_config "$DOTFILES/config/starship/starship.toml" "$HOME/.config/starship.toml"
+link_file "$DOTFILES/config/starship/starship.toml" "$HOME/.config/starship.toml"
 
-# Git config
+# Git
 echo "[git]"
-link_config "$DOTFILES/config/git/config" "$HOME/.config/git/config"
+mkdir -p "$HOME/.config/git"
+link_file "$DOTFILES/config/git/config" "$HOME/.config/git/config"
 
-# Fish config integration
-echo "[fish]"
-mkdir -p "$HOME/.config/fish/conf.d"
-link_config "$DOTFILES/config/fish/omarchy.fish" "$HOME/.config/fish/conf.d/omarchy.fish"
+# Zsh
+echo "[zsh]"
+link_file "$DOTFILES/config/zsh/zshrc" "$HOME/.zshrc"
 
-# Scripts to ~/.local/bin
+# Scripts
 echo "[scripts]"
 mkdir -p "$HOME/.local/bin"
 for script in "$DOTFILES/bin/"*; do
-    if [[ -f "$script" ]]; then
-        link_config "$script" "$HOME/.local/bin/$(basename "$script")"
-    fi
+    [[ -f "$script" ]] && link_file "$script" "$HOME/.local/bin/$(basename "$script")"
 done
 
-# Setup current theme
+# Theme
 echo ""
 echo "[theme]"
 mkdir -p "$HOME/.config/omarchy"
 CURRENT_THEME=$(cat "$HOME/.config/omarchy/current-theme" 2>/dev/null || echo "tokyo-night")
-echo "  Current theme: $CURRENT_THEME"
+echo "  Applying theme: $CURRENT_THEME"
 ln -sf "$DOTFILES/themes/$CURRENT_THEME" "$HOME/.config/omarchy/current"
 
-# GTK dark mode
+# GTK
 gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark" 2>/dev/null || true
 gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" 2>/dev/null || true
 
+# Docker group check
+if command -v docker &>/dev/null && ! groups | grep -q docker; then
+    echo ""
+    echo "[docker]"
+    echo "  Run: sudo usermod -aG docker $USER"
+fi
+
 echo ""
-echo "Done! Reload Hyprland with: hyprctl reload"
-echo "Switch themes with: omarchy-theme-set [theme-name]"
+echo "=== Done! ==="
+echo ""
+echo "Next steps:"
+echo "  1. Change shell:    chsh -s /bin/zsh"
+echo "  2. Reload Hyprland: hyprctl reload"
+echo "  3. Switch themes:   omarchy-theme-set [theme-name]"
+echo "  4. Log out and back in for shell change to take effect"

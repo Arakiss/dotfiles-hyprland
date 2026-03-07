@@ -1,0 +1,113 @@
+# Omarchy ZSH Configuration
+
+# History
+HISTFILE=~/.zsh_history
+HISTSIZE=50000
+SAVEHIST=50000
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt SHARE_HISTORY
+setopt EXTENDED_HISTORY
+
+# Options
+setopt AUTO_CD
+setopt CORRECT
+setopt COMPLETE_IN_WORD
+setopt NO_BEEP
+setopt INTERACTIVE_COMMENTS
+
+# Vi mode (optional, comment out if you prefer emacs mode)
+# bindkey -v
+
+# Emacs keybindings (default, more intuitive)
+bindkey -e
+
+# Completion
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*:descriptions' format '%F{cyan}-- %d --%f'
+
+# Plugins
+[[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+[[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Aliases - matching OmArchy style
+alias n='nvim'
+alias v='nvim'
+alias g='git'
+alias lg='lazygit'
+alias ld='lazydocker'
+alias d='docker'
+alias dc='docker compose'
+
+# Git aliases
+alias gcm='git commit -m'
+alias gcam='git commit -am'
+alias gca='git commit --amend'
+alias gs='git status'
+alias gd='git diff'
+alias gp='git push'
+alias gl='git pull'
+alias gco='git checkout'
+alias gb='git branch'
+alias glog='git log --oneline --graph --decorate -15'
+
+# Modern CLI replacements
+if command -v eza &>/dev/null; then
+    alias ls='eza --icons'
+    alias ll='eza -la --icons --group-directories-first'
+    alias la='eza -a --icons'
+    alias lt='eza --tree --level=2 --icons'
+fi
+
+if command -v bat &>/dev/null; then
+    alias cat='bat --style=plain'
+    export BAT_THEME="ansi"
+fi
+
+if command -v dust &>/dev/null; then
+    alias du='dust'
+fi
+
+# Navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+
+# Utils
+alias open='xdg-open'
+alias cls='clear'
+alias ff='fzf --preview "bat --color=always --style=numbers {}" --bind "enter:become(nvim {})"'
+
+# PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Starship prompt
+if command -v starship &>/dev/null; then
+    eval "$(starship init zsh)"
+fi
+
+# Zoxide
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init zsh)"
+    alias cd='z'
+fi
+
+# fzf
+[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
+[[ -f /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
+
+# CUDA
+[[ -f /etc/profile.d/cuda.sh ]] && source /etc/profile.d/cuda.sh
+
+# Fastfetch on first shell
+if [[ -z "$OMARCHY_GREETED" ]]; then
+    export OMARCHY_GREETED=1
+    command -v fastfetch &>/dev/null && fastfetch
+fi

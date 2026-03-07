@@ -16,6 +16,11 @@ style = { shape = "Block", blinking = "Off" }
 [scrolling]
 history = 10000
 
+# Right-click to paste
+[[mouse.bindings]]
+mouse = "Right"
+action = "Paste"
+
 # Tokyo Night colors (default - overridden by theme)
 [colors.primary]
 background = "#1a1b26"

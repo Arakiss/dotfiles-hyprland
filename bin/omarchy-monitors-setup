@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Auto-detect monitors and generate a local config
+# Usage: omarchy-monitors-setup
+# Creates ~/.config/hypr/monitors-local.conf with your specific monitor layout
+
+LOCAL_CONF="$HOME/.config/hypr/monitors-local.conf"
+
+echo "# Auto-generated monitor config - $(date)"
+echo "# Edit this file to customize your monitor layout"
+echo "# Re-run omarchy-monitors-setup to regenerate"
+echo ""
+
+# Get current monitor info from Hyprland
+monitors=$(hyprctl monitors -j 2>/dev/null)
+
+if [[ -z "$monitors" ]] || [[ "$monitors" == "[]" ]]; then
+    echo "# No monitors detected via hyprctl, using fallback"
+    echo "monitor = , preferred, auto, auto"
+    exit 0
+fi
+
+echo "$monitors" | python3 -c "
+import json, sys
+monitors = json.load(sys.stdin)
+for m in monitors:
+    name = m['name']
+    w = m['width']
+    h = m['height']
+    rate = m['refreshRate']
+    x = m['x']
+    y = m['y']
+    scale = m['scale']
+    desc = m.get('description', '')
+    print(f'# {desc}')
+    print(f'monitor = {name}, {w}x{h}@{rate:.0f}, {x}x{y}, {scale}')
+    print()
+" > "$LOCAL_CONF"
+
+echo "Monitor config written to: $LOCAL_CONF"
+cat "$LOCAL_CONF"
