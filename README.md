@@ -165,6 +165,12 @@ All bindings use `SUPER` (Windows key) as the main modifier.
 | `ALT + TAB`                  | Cycle windows                                   |
 | `SUPER + Ctrl + ,`           | Toggle last focused window                      |
 
+### Workspace Overview (hyprexpo)
+
+| Binding         | Action                         |
+| --------------- | ------------------------------ |
+| `` SUPER + ` `` | Toggle workspace overview grid |
+
 ### Window Groups (Tabbed Windows)
 
 | Binding               | Action                        |
