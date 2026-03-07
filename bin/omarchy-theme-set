@@ -135,6 +135,37 @@ apply_theme() {
             "$hyprlock_conf"
     fi
 
+    # --- Neovim ---
+    # Map theme names to neovim colorschemes
+    local nvim_colorscheme=""
+    case "$theme" in
+        tokyo-night)      nvim_colorscheme="tokyonight-night" ;;
+        catppuccin)       nvim_colorscheme="catppuccin-mocha" ;;
+        catppuccin-latte) nvim_colorscheme="catppuccin-latte" ;;
+        gruvbox)          nvim_colorscheme="gruvbox" ;;
+        nord)             nvim_colorscheme="nord" ;;
+        rose-pine)        nvim_colorscheme="rose-pine" ;;
+        kanagawa)         nvim_colorscheme="kanagawa" ;;
+        everforest)       nvim_colorscheme="everforest" ;;
+        miasma)           nvim_colorscheme="miasma" ;;
+        hackerman|matte-black|vantablack|osaka-jade)
+                          nvim_colorscheme="tokyonight-night" ;;
+        ethereal|ristretto)
+                          nvim_colorscheme="catppuccin-mocha" ;;
+        flexoki-light|white)
+                          nvim_colorscheme="tokyonight-day" ;;
+    esac
+    if [[ -n "$nvim_colorscheme" ]]; then
+        local nvim_colors="$HOME/.config/nvim/lua/plugins/colorschemes.lua"
+        if [[ -f "$nvim_colors" ]]; then
+            sed -i "s/colorscheme = \".*\"/colorscheme = \"$nvim_colorscheme\"/" "$nvim_colors"
+        fi
+        # Apply to running neovim instances
+        for sock in /run/user/$(id -u)/nvim.*.0 /tmp/nvim.*/0; do
+            [[ -S "$sock" ]] && nvim --server "$sock" --remote-send "<cmd>colorscheme $nvim_colorscheme<cr>" 2>/dev/null
+        done
+    fi
+
     # Restart waybar to pick up new styles
     killall waybar 2>/dev/null
     waybar &>/dev/null &

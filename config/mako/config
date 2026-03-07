@@ -22,13 +22,13 @@ max-icon-size=48
 icon-location=left
 
 [urgency=low]
-border-color=#565f89
+border-color=#7aa2f7
 default-timeout=3000
 
 [urgency=high]
-border-color=#f7768e
+border-color=#7aa2f7
 default-timeout=10000
 
 [urgency=critical]
-border-color=#f7768e
+border-color=#7aa2f7
 default-timeout=0

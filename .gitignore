@@ -1,0 +1,16 @@
+# Machine-specific
+config/hypr/monitors-local.conf
+
+# Editor state
+*.swp
+*.swo
+*~
+.netrwhist
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+*.tmp
+*.log

@@ -67,6 +67,55 @@ echo "[btop]"
 link_dir "$DOTFILES/config/btop" "$HOME/.config/btop"
 echo "[fastfetch]"
 link_dir "$DOTFILES/config/fastfetch" "$HOME/.config/fastfetch"
+echo "[nvim]"
+link_dir "$DOTFILES/config/nvim" "$HOME/.config/nvim"
+echo "[lazygit]"
+link_dir "$DOTFILES/config/lazygit" "$HOME/.config/lazygit"
+echo "[fontconfig]"
+link_dir "$DOTFILES/config/fontconfig" "$HOME/.config/fontconfig"
+echo "[ghostty]"
+link_dir "$DOTFILES/config/ghostty" "$HOME/.config/ghostty"
+echo "[swayosd]"
+link_dir "$DOTFILES/config/swayosd" "$HOME/.config/swayosd"
+echo "[imv]"
+link_dir "$DOTFILES/config/imv" "$HOME/.config/imv"
+echo "[walker]"
+link_dir "$DOTFILES/config/walker" "$HOME/.config/walker"
+
+# environment.d
+echo "[environment.d]"
+link_dir "$DOTFILES/config/environment.d" "$HOME/.config/environment.d"
+
+# systemd user services
+echo "[systemd]"
+mkdir -p "$HOME/.config/systemd/user"
+for f in "$DOTFILES/config/systemd/user/"*; do
+    [[ -f "$f" ]] && link_file "$f" "$HOME/.config/systemd/user/$(basename "$f")"
+done
+
+# Browser flags
+echo "[browser-flags]"
+[[ -f "$DOTFILES/config/chromium-flags.conf" ]] && link_file "$DOTFILES/config/chromium-flags.conf" "$HOME/.config/chromium-flags.conf"
+[[ -f "$DOTFILES/config/brave-flags.conf" ]] && link_file "$DOTFILES/config/brave-flags.conf" "$HOME/.config/brave-flags.conf"
+[[ -f "$DOTFILES/config/xdg-terminals.list" ]] && link_file "$DOTFILES/config/xdg-terminals.list" "$HOME/.config/xdg-terminals.list"
+
+# Applications (.desktop files)
+echo "[applications]"
+mkdir -p "$HOME/.local/share/applications"
+for f in "$DOTFILES/applications/"*.desktop; do
+    [[ -f "$f" ]] && link_file "$f" "$HOME/.local/share/applications/$(basename "$f")"
+done
+if [[ -d "$DOTFILES/applications/hidden" ]]; then
+    for f in "$DOTFILES/applications/hidden/"*.desktop; do
+        [[ -f "$f" ]] && link_file "$f" "$HOME/.local/share/applications/$(basename "$f")"
+    done
+fi
+if [[ -d "$DOTFILES/applications/icons" ]]; then
+    mkdir -p "$HOME/.local/share/icons"
+    for f in "$DOTFILES/applications/icons/"*; do
+        [[ -f "$f" ]] && link_file "$f" "$HOME/.local/share/icons/$(basename "$f")"
+    done
+fi
 
 # Starship
 echo "[starship]"
