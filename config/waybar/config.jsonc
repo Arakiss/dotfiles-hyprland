@@ -81,7 +81,10 @@
         "format-disabled": "󰂲",
         "format-connected": "󰂱 {num_connections}",
         "tooltip-format": "{controller_alias}\n{num_connections} connected",
-        "on-click": "blueman-manager"
+        "tooltip-format-connected": "{controller_alias}\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}",
+        "on-click": "bluetoothctl power on && bluetoothctl connect 2C:BE:EE:65:A2:DD || notify-send 'Bluetooth' 'Could not connect' -i bluetooth",
+        "on-click-right": "pavucontrol"
     },
 
     "pulseaudio": {
@@ -93,6 +96,7 @@
         },
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
         "on-click-right": "pavucontrol",
+        "on-click-middle": "audio-switch",
         "on-scroll-up": "wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 2%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%-"
     },

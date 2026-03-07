@@ -1,0 +1,53 @@
+#!/bin/bash
+# Quick audio output switcher using rofi
+# Shows all available sinks with the current one marked
+
+get_sinks() {
+    pw-dump 2>/dev/null | python3 -c "
+import json, sys, subprocess
+
+data = json.load(sys.stdin)
+default = subprocess.run(
+    ['wpctl', 'inspect', '@DEFAULT_AUDIO_SINK@'],
+    capture_output=True, text=True
+).stdout
+
+default_name = ''
+for line in default.splitlines():
+    if 'node.name' in line:
+        default_name = line.split('=')[1].strip().strip('\"')
+        break
+
+for obj in data:
+    props = obj.get('info', {}).get('props', {})
+    if props.get('media.class') == 'Audio/Sink':
+        nid = obj['id']
+        name = props.get('node.description', props.get('node.name', '?'))
+        node_name = props.get('node.name', '')
+        marker = ' *' if node_name == default_name else ''
+        print(f'{nid}|{name}{marker}')
+"
+}
+
+sinks=$(get_sinks)
+
+if [ -z "$sinks" ]; then
+    notify-send "Audio Switch" "No audio devices found" -i audio-volume-muted
+    exit 1
+fi
+
+chosen=$(echo "$sinks" | cut -d'|' -f2 | rofi -dmenu -i -p "Audio Output" -theme-str 'window {width: 400px;}')
+
+if [ -n "$chosen" ]; then
+    clean_name="${chosen% \*}"
+    sink_id=$(echo "$sinks" | grep "|${clean_name}" | head -1 | cut -d'|' -f1)
+
+    if [ -z "$sink_id" ]; then
+        sink_id=$(echo "$sinks" | grep "|${chosen}" | head -1 | cut -d'|' -f1)
+    fi
+
+    if [ -n "$sink_id" ]; then
+        wpctl set-default "$sink_id"
+        notify-send "Audio Output" "Switched to: $clean_name" -i audio-volume-high -t 2000
+    fi
+fi
