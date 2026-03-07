@@ -83,7 +83,7 @@
         "tooltip-format": "{controller_alias}\n{num_connections} connected",
         "tooltip-format-connected": "{controller_alias}\n{num_connections} connected\n\n{device_enumerate}",
         "tooltip-format-enumerate-connected": "{device_alias}",
-        "on-click": "bluetoothctl power on && bluetoothctl connect 2C:BE:EE:65:A2:DD || notify-send 'Bluetooth' 'Could not connect' -i bluetooth",
+        "on-click": "bluetoothctl power on && bluetoothctl connect $(bluetoothctl devices Paired | head -1 | awk '{print $2}') || notify-send 'Bluetooth' 'No paired device' -i bluetooth",
         "on-click-right": "pavucontrol"
     },
 
