@@ -1,5 +1,16 @@
 # Machine-specific
 config/hypr/monitors-local.conf
+*-local.conf
+*.local
+
+# Secrets
+*.env
+*.pem
+*.key
+*.gpg
+*credentials*
+*secret*
+*token*
 
 # Editor state
 *.swp
