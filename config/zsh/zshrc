@@ -108,7 +108,11 @@ if command -v keychain &>/dev/null; then
 fi
 
 # CUDA
-[[ -f /etc/profile.d/cuda.sh ]] && source /etc/profile.d/cuda.sh
+if [[ -d /opt/cuda ]]; then
+    export CUDA_PATH=/opt/cuda
+    export PATH="/opt/cuda/bin:$PATH"
+    export NVCC_CCBIN='/usr/bin/g++'
+fi
 
 # fzf
 [[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
@@ -127,6 +131,7 @@ fi
 
 # Zoxide — MUST be last (see https://github.com/ajeetdsouza/zoxide/issues)
 if command -v zoxide &>/dev/null; then
+    export _ZO_DOCTOR=0
     eval "$(zoxide init zsh)"
     alias cd='z'
 fi

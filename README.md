@@ -110,23 +110,49 @@ All bindings use `SUPER` (Windows key) as the main modifier.
 
 ### Window Management
 
-| Binding                      | Action          |
-| ---------------------------- | --------------- |
-| `SUPER + W`                  | Close window    |
-| `SUPER + F`                  | Fullscreen      |
-| `SUPER + T`                  | Toggle floating |
-| `SUPER + Arrow Keys`         | Move focus      |
-| `SUPER + Shift + Arrow Keys` | Swap windows    |
-| `SUPER + -/=`                | Resize width    |
+| Binding                      | Action                                          |
+| ---------------------------- | ----------------------------------------------- |
+| `SUPER + W`                  | Close window                                    |
+| `SUPER + F`                  | Fullscreen                                      |
+| `SUPER + Ctrl + F`           | Tiled fullscreen (maximize in tile)             |
+| `SUPER + T`                  | Toggle floating                                 |
+| `SUPER + Arrow Keys`         | Move focus                                      |
+| `SUPER + Shift + Arrow Keys` | Swap windows                                    |
+| `SUPER + R`                  | Enter resize mode (arrows resize, Escape exits) |
+| `SUPER + BackSpace`          | Toggle window opacity                           |
+| `ALT + TAB`                  | Cycle windows                                   |
+| `SUPER + Ctrl + ,`           | Toggle last focused window                      |
+
+### Window Groups (Tabbed Windows)
+
+| Binding               | Action                        |
+| --------------------- | ----------------------------- |
+| `SUPER + G`           | Toggle group                  |
+| `SUPER + Shift + G`   | Move out of group             |
+| `SUPER + Alt + Arrow` | Move window into group        |
+| `SUPER + Alt + TAB`   | Next window in group          |
+| `SUPER + Alt + 1-5`   | Jump to group window by index |
+| `SUPER + ]`           | Lock/unlock group             |
 
 ### Workspaces
 
-| Binding               | Action                   |
-| --------------------- | ------------------------ |
-| `SUPER + 1-0`         | Switch workspace         |
-| `SUPER + Shift + 1-0` | Move window to workspace |
-| `SUPER + Tab`         | Next workspace           |
-| `SUPER + S`           | Scratchpad               |
+| Binding                     | Action                            |
+| --------------------------- | --------------------------------- |
+| `SUPER + 1-0`               | Switch workspace                  |
+| `SUPER + Shift + 1-0`       | Move window to workspace (follow) |
+| `SUPER + Shift + Alt + 1-0` | Move window to workspace (stay)   |
+| `SUPER + Tab`               | Next workspace                    |
+| `SUPER + Ctrl + Tab`        | Previous workspace                |
+| `SUPER + S`                 | Scratchpad                        |
+| `SUPER + Shift + S`         | Send to scratchpad                |
+
+### Monitors
+
+| Binding                         | Action                    |
+| ------------------------------- | ------------------------- |
+| `SUPER + .` / `,`               | Focus next/prev monitor   |
+| `SUPER + Shift + .` / `,`       | Move window to monitor    |
+| `SUPER + Shift + Alt + .` / `,` | Move workspace to monitor |
 
 ### System
 
