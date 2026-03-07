@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# Dotfiles installer - symlinks everything to ~/.config
+# Usage: omarchy-install [--force]
+
+set -euo pipefail
+
+DOTFILES="$HOME/.dotfiles"
+FORCE="${1:-}"
+BACKUP_DIR="$HOME/.config-backup/$(date +%Y%m%d_%H%M%S)"
+
+link_config() {
+    local src="$1"
+    local dst="$2"
+
+    if [[ -e "$dst" ]] && [[ ! -L "$dst" ]]; then
+        if [[ "$FORCE" != "--force" ]]; then
+            echo "  Backing up existing: $dst"
+            mkdir -p "$(dirname "$BACKUP_DIR/${dst#$HOME/}")"
+            mv "$dst" "$BACKUP_DIR/${dst#$HOME/}"
+        else
+            rm -rf "$dst"
+        fi
+    fi
+
+    mkdir -p "$(dirname "$dst")"
+    ln -sf "$src" "$dst"
+    echo "  Linked: $dst -> $src"
+}
+
+echo "Installing Omarchy dotfiles..."
+echo ""
+
+# Config directories to symlink
+configs=(
+    "hypr"
+    "waybar"
+    "mako"
+    "rofi"
+    "alacritty"
+    "kitty"
+    "tmux"
+    "btop"
+    "fastfetch"
+)
+
+for config in "${configs[@]}"; do
+    if [[ -d "$DOTFILES/config/$config" ]]; then
+        echo "[$config]"
+        link_config "$DOTFILES/config/$config" "$HOME/.config/$config"
+    fi
+done
+
+# Starship config (goes to ~/.config/starship.toml)
+echo "[starship]"
+link_config "$DOTFILES/config/starship/starship.toml" "$HOME/.config/starship.toml"
+
+# Git config
+echo "[git]"
+link_config "$DOTFILES/config/git/config" "$HOME/.config/git/config"
+
+# Fish config integration
+echo "[fish]"
+mkdir -p "$HOME/.config/fish/conf.d"
+link_config "$DOTFILES/config/fish/omarchy.fish" "$HOME/.config/fish/conf.d/omarchy.fish"
+
+# Scripts to ~/.local/bin
+echo "[scripts]"
+mkdir -p "$HOME/.local/bin"
+for script in "$DOTFILES/bin/"*; do
+    if [[ -f "$script" ]]; then
+        link_config "$script" "$HOME/.local/bin/$(basename "$script")"
+    fi
+done
+
+# Setup current theme
+echo ""
+echo "[theme]"
+mkdir -p "$HOME/.config/omarchy"
+CURRENT_THEME=$(cat "$HOME/.config/omarchy/current-theme" 2>/dev/null || echo "tokyo-night")
+echo "  Current theme: $CURRENT_THEME"
+ln -sf "$DOTFILES/themes/$CURRENT_THEME" "$HOME/.config/omarchy/current"
+
+# GTK dark mode
+gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark" 2>/dev/null || true
+gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" 2>/dev/null || true
+
+echo ""
+echo "Done! Reload Hyprland with: hyprctl reload"
+echo "Switch themes with: omarchy-theme-set [theme-name]"

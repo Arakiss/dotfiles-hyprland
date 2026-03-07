@@ -1,0 +1,133 @@
+/* Waybar - Tokyo Night Theme (default) */
+/* Colors are overridden by theme-set script */
+
+@define-color bg #1a1b26;
+@define-color bg-alt #24283b;
+@define-color fg #a9b1d6;
+@define-color accent #7aa2f7;
+@define-color accent2 #bb9af7;
+@define-color red #f7768e;
+@define-color green #9ece6a;
+@define-color yellow #e0af68;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Font Awesome 6 Free";
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: transparent;
+    color: @fg;
+}
+
+window#waybar > box {
+    background: alpha(@bg, 0.85);
+    border: 1px solid alpha(@accent, 0.3);
+    border-radius: 12px;
+    padding: 0 8px;
+}
+
+#workspaces button {
+    padding: 2px 8px;
+    margin: 3px 2px;
+    border-radius: 8px;
+    color: alpha(@fg, 0.5);
+    background: transparent;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+#workspaces button.active {
+    color: @bg;
+    background: @accent;
+}
+
+#workspaces button:hover {
+    color: @fg;
+    background: alpha(@accent, 0.3);
+}
+
+#window {
+    color: alpha(@fg, 0.7);
+    padding: 0 12px;
+    font-style: italic;
+}
+
+#clock {
+    color: @accent;
+    font-weight: bold;
+    padding: 0 12px;
+}
+
+#network,
+#bluetooth,
+#pulseaudio,
+#battery,
+#custom-notification,
+#custom-power,
+#tray {
+    padding: 0 8px;
+    margin: 3px 2px;
+    border-radius: 8px;
+}
+
+#network {
+    color: @green;
+}
+
+#bluetooth {
+    color: @accent;
+}
+
+#pulseaudio {
+    color: @accent2;
+}
+
+#pulseaudio.muted {
+    color: alpha(@fg, 0.3);
+}
+
+#battery {
+    color: @green;
+}
+
+#battery.warning {
+    color: @yellow;
+}
+
+#battery.critical {
+    color: @red;
+    animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+    to { color: @fg; }
+}
+
+#custom-notification {
+    color: @yellow;
+}
+
+#custom-power {
+    color: @red;
+    padding: 0 10px;
+}
+
+#tray {
+    padding: 0 6px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+tooltip {
+    background: @bg;
+    border: 1px solid @accent;
+    border-radius: 8px;
+}
+
+tooltip label {
+    color: @fg;
+}

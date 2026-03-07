@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Screen recording toggle using wf-recorder or gpu-screen-recorder
+
+RECORDINGS_DIR="$HOME/Vídeos/Recordings"
+mkdir -p "$RECORDINGS_DIR"
+PIDFILE="/tmp/omarchy-screenrecord.pid"
+
+if [[ -f "$PIDFILE" ]]; then
+    # Stop recording
+    kill "$(cat "$PIDFILE")" 2>/dev/null
+    rm -f "$PIDFILE"
+    notify-send "Recording" "Screen recording saved" -t 3000
+    exit 0
+fi
+
+timestamp=$(date +%Y%m%d_%H%M%S)
+filename="$RECORDINGS_DIR/recording_$timestamp.mp4"
+
+if command -v gpu-screen-recorder &>/dev/null; then
+    gpu-screen-recorder -w screen -f 60 -o "$filename" &
+    echo $! > "$PIDFILE"
+elif command -v wf-recorder &>/dev/null; then
+    wf-recorder -f "$filename" &
+    echo $! > "$PIDFILE"
+else
+    notify-send "Error" "No screen recorder found. Install gpu-screen-recorder or wf-recorder" -t 5000
+    exit 1
+fi
+
+notify-send "Recording" "Screen recording started..." -t 3000

@@ -1,0 +1,92 @@
+/* Rofi - Omarchy Style (Tokyo Night) */
+
+configuration {
+    modi: "drun,run,window,filebrowser";
+    show-icons: true;
+    icon-theme: "Adwaita";
+    terminal: "alacritty";
+    display-drun: " Apps";
+    display-run: " Run";
+    display-window: " Windows";
+    display-filebrowser: " Files";
+    drun-display-format: "{name}";
+    font: "JetBrainsMono Nerd Font 11";
+}
+
+* {
+    bg:       #1a1b26ee;
+    bg-alt:   #24283b;
+    fg:       #a9b1d6;
+    accent:   #7aa2f7;
+    accent2:  #bb9af7;
+    urgent:   #f7768e;
+    transparent: #00000000;
+}
+
+window {
+    width: 600px;
+    transparency: "real";
+    background-color: @bg;
+    border: 2px;
+    border-color: @accent;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+mainbox {
+    background-color: @transparent;
+    children: [ inputbar, listview ];
+    spacing: 15px;
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border-radius: 8px;
+    padding: 10px 16px;
+    children: [ prompt, entry ];
+    spacing: 10px;
+}
+
+prompt {
+    background-color: @transparent;
+    text-color: @accent;
+    font: "JetBrainsMono Nerd Font 12";
+}
+
+entry {
+    background-color: @transparent;
+    text-color: @fg;
+    placeholder: "Search...";
+    placeholder-color: #565f89;
+}
+
+listview {
+    background-color: @transparent;
+    lines: 8;
+    columns: 1;
+    fixed-height: false;
+    spacing: 4px;
+}
+
+element {
+    background-color: @transparent;
+    padding: 8px 12px;
+    border-radius: 8px;
+    spacing: 10px;
+}
+
+element selected {
+    background-color: @bg-alt;
+    text-color: @accent;
+}
+
+element-icon {
+    background-color: @transparent;
+    size: 24px;
+}
+
+element-text {
+    background-color: @transparent;
+    text-color: inherit;
+    vertical-align: 0.5;
+}

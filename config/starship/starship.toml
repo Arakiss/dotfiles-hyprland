@@ -1,0 +1,23 @@
+format = """$directory$git_branch$git_status$character"""
+
+[character]
+success_symbol = "[>](bold cyan)"
+error_symbol = "[x](bold cyan)"
+
+[directory]
+truncation_length = 2
+truncate_to_repo = true
+style = "bold cyan"
+
+[git_branch]
+format = "[$branch]($style) "
+style = "italic cyan"
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+style = "cyan"
+ahead = "↑"
+behind = "↓"
+untracked = "?"
+modified = "!"
+staged = "+"

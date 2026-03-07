@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Cycle to next wallpaper in current theme
+
+CURRENT_THEME=$(cat "$HOME/.config/omarchy/current-theme" 2>/dev/null || echo "tokyo-night")
+THEME_DIR="$HOME/.dotfiles/themes/$CURRENT_THEME"
+CUSTOM_BG_DIR="$HOME/.config/omarchy/backgrounds/$CURRENT_THEME"
+CURRENT_WP_LINK="$HOME/.config/omarchy/current/wallpaper"
+
+# Collect all wallpapers from theme and custom dirs
+wallpapers=()
+for dir in "$THEME_DIR/backgrounds" "$CUSTOM_BG_DIR"; do
+    if [[ -d "$dir" ]]; then
+        while IFS= read -r -d '' file; do
+            wallpapers+=("$file")
+        done < <(find "$dir" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) -print0)
+    fi
+done
+
+if [[ ${#wallpapers[@]} -eq 0 ]]; then
+    notify-send "Wallpaper" "No wallpapers found for theme: $CURRENT_THEME" -t 3000
+    exit 1
+fi
+
+# Pick random wallpaper (different from current)
+current=$(readlink -f "$CURRENT_WP_LINK" 2>/dev/null)
+attempts=0
+while true; do
+    wallpaper="${wallpapers[$((RANDOM % ${#wallpapers[@]}))]}"
+    if [[ "$wallpaper" != "$current" ]] || [[ ${#wallpapers[@]} -eq 1 ]] || [[ $attempts -gt 5 ]]; then
+        break
+    fi
+    ((attempts++))
+done
+
+# Apply
+mkdir -p "$(dirname "$CURRENT_WP_LINK")"
+ln -sf "$wallpaper" "$CURRENT_WP_LINK"
+killall swaybg 2>/dev/null
+swaybg -m fill -i "$wallpaper" &>/dev/null &
+disown
+
+notify-send "Wallpaper" "$(basename "$wallpaper")" -t 2000
