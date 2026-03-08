@@ -216,7 +216,7 @@ All bindings use `SUPER` (Windows key) as the main modifier.
 | `SUPER + B`                    | Toggle Waybar           |
 | `Print`                        | Screenshot (full)       |
 | `SUPER + Print`                | Screenshot (area)       |
-| `SUPER + F1`                   | Keybindings cheatsheet  |
+| `SUPER + K`                    | Keybindings cheatsheet  |
 
 ## Theme System
 
