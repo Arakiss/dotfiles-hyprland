@@ -205,15 +205,16 @@ All bindings use `SUPER` (Windows key) as the main modifier.
 
 ### System
 
-| Binding                        | Action            |
-| ------------------------------ | ----------------- |
-| `SUPER + Ctrl + Space`         | Next wallpaper    |
-| `SUPER + Ctrl + Shift + Space` | Theme switcher    |
-| `SUPER + L`                    | Lock screen       |
-| `SUPER + V`                    | Clipboard history |
-| `SUPER + B`                    | Toggle Waybar     |
-| `Print`                        | Screenshot (full) |
-| `SUPER + Print`                | Screenshot (area) |
+| Binding                        | Action                 |
+| ------------------------------ | ---------------------- |
+| `SUPER + Ctrl + Space`         | Next wallpaper         |
+| `SUPER + Ctrl + Shift + Space` | Theme switcher         |
+| `SUPER + L`                    | Lock screen            |
+| `SUPER + V`                    | Clipboard history      |
+| `SUPER + B`                    | Toggle Waybar          |
+| `Print`                        | Screenshot (full)      |
+| `SUPER + Print`                | Screenshot (area)      |
+| `SUPER + F1`                   | Keybindings cheatsheet |
 
 ## Theme System
 

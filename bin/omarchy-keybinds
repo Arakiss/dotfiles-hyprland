@@ -1,0 +1,66 @@
+#!/bin/bash
+# Show all Hyprland keybindings in rofi
+# Usage: omarchy-keybinds
+
+KEYBINDS="SUPER + Enter | Ghostty terminal
+SUPER + Shift + Enter | Alacritty terminal
+SUPER + Alt + Enter | Ghostty + tmux
+SUPER + Space | App launcher (rofi)
+SUPER + Shift + B | Firefox
+SUPER + Shift + F | File manager
+───────────────────────────
+SUPER + W | Close window
+SUPER + F | Fullscreen
+SUPER + Ctrl + F | Tiled fullscreen (in tile)
+SUPER + T | Toggle floating
+SUPER + O | Pin window (always on top)
+SUPER + BackSpace | Toggle window opacity
+───────────────────────────
+SUPER + Arrows | Move focus
+SUPER + Shift + Arrows | Swap windows
+SUPER + R | Resize mode (arrows, Esc exits)
+SUPER + - / = | Resize width
+SUPER + Shift + - / = | Resize height
+ALT + TAB | Cycle windows
+SUPER + Ctrl + , | Toggle last window
+───────────────────────────
+SUPER + G | Toggle window group
+SUPER + Shift + G | Move out of group
+SUPER + Alt + Arrows | Move into group
+SUPER + Alt + TAB | Cycle group tabs
+SUPER + Alt + 1-5 | Jump to group tab
+SUPER + ] | Lock/unlock group
+───────────────────────────
+SUPER + 1-0 | Switch workspace
+SUPER + Shift + 1-0 | Move window (follow)
+SUPER + Shift + Alt + 1-0 | Move window (stay)
+SUPER + TAB | Next workspace
+SUPER + Shift + TAB | Prev workspace
+SUPER + Ctrl + TAB | Last workspace
+SUPER + º | Workspace overview (expo)
+───────────────────────────
+SUPER + S | Scratchpad (show/hide)
+SUPER + Shift + S | Minimize (send to scratch)
+SUPER + Ctrl + S | Restore window (picker)
+───────────────────────────
+SUPER + . / , | Focus next/prev monitor
+SUPER + Shift + . / , | Move window to monitor
+SUPER + Shift + Alt + . / , | Move workspace to monitor
+───────────────────────────
+SUPER + V | Clipboard history
+SUPER + Shift + C | Color picker
+SUPER + B | Toggle waybar
+SUPER + N | Dismiss notification
+SUPER + Shift + N | Dismiss all notifications
+SUPER + A | Audio device switcher
+SUPER + L | Lock screen
+───────────────────────────
+Print | Screenshot (full)
+SUPER + Print | Screenshot (area)
+SUPER + Shift + Print | Screenshot (window)
+SUPER + Alt + R | Screen recording
+───────────────────────────
+SUPER + Ctrl + Space | Next wallpaper
+SUPER + Ctrl + Shift + Space | Theme switcher"
+
+echo "$KEYBINDS" | rofi -dmenu -i -p "Keybindings" -theme-str 'window {width: 55%;} listview {lines: 25;}'
