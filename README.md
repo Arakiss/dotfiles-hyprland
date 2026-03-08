@@ -191,8 +191,9 @@ All bindings use `SUPER` (Windows key) as the main modifier.
 | `SUPER + Shift + Alt + 1-0` | Move window to workspace (stay)   |
 | `SUPER + Tab`               | Next workspace                    |
 | `SUPER + Ctrl + Tab`        | Previous workspace                |
-| `SUPER + S`                 | Scratchpad                        |
-| `SUPER + Shift + S`         | Send to scratchpad                |
+| `SUPER + S`                 | Scratchpad (show/hide)            |
+| `SUPER + Shift + S`         | Minimize window (send to scratch) |
+| `SUPER + Ctrl + S`          | Restore window (rofi picker)      |
 
 ### Monitors
 
