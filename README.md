@@ -10,7 +10,7 @@ A curated, modular desktop environment built around the Tokyo Night aesthetic wi
 - **One-command theme switching** that updates Hyprland, Waybar, Ghostty, Rofi, SwayNC, Hyprlock, btop, and GTK simultaneously
 - **Ghostty terminal** with 5 themes, 4 presets, 5 font configs, tmux integration, and a `gconfig` switcher
 - **Modular Hyprland config** — split into bindings, input, look-and-feel, apps, autostart, and environment files
-- **95+ utility scripts** — system toggles, app launchers, restart helpers, package management, and theme tools
+- **200+ utility scripts** — system toggles, app launchers, restart helpers, package management, and theme tools
 - **Dual-monitor setup** with machine-specific config separation (local overrides stay out of the repo)
 - **Wayland-native stack** — swww (animated transitions + GIF wallpapers), grim+slurp, cliphist, swaync, hyprlock, hypridle, swayosd
 
@@ -36,7 +36,7 @@ A curated, modular desktop environment built around the Tokyo Night aesthetic wi
 
 ```
 ~/.dotfiles/
-├── bin/                    # 95+ scripts (symlinked to ~/.local/bin/)
+├── bin/                    # 200+ scripts (symlinked to ~/.local/bin/)
 ├── config/
 │   ├── hypr/               # Modular Hyprland config
 │   ├── waybar/             # Bar config + themed CSS
@@ -288,10 +288,10 @@ omarchy-monitors-setup
 
 ## Credits
 
-- [Omarchy](https://github.com/basecamp/omarchy) by DHH / Basecamp — inspiration, scripts, themes, and wallpapers
+- [Omarchy](https://github.com/basecamp/omarchy) by DHH / Basecamp (MIT License) — the majority of `omarchy-*` scripts, themes, wallpapers, default configs, and the template engine are from or derived from Omarchy. This repo is a personal adaptation for CachyOS, not an independent creation.
 - [Hyprland](https://hyprland.org) — the Wayland compositor
 - [Tokyo Night](https://github.com/enkia/tokyo-night-vscode-theme) — the default color scheme
 
 ## License
 
-Personal dotfiles. Themes and wallpapers from [Omarchy](https://github.com/basecamp/omarchy) are subject to their original license.
+Personal dotfiles. The `omarchy-*` scripts, themes, and default configs originate from [Omarchy](https://github.com/basecamp/omarchy) under the [MIT License](https://github.com/basecamp/omarchy/blob/main/LICENSE). Custom additions (SDDM/Plymouth CachyOS themes, SwayNC integration, Rofi config, Neovim setup, Zsh config, Ghostty presets) are my own.
