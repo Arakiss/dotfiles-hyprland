@@ -1,23 +1,87 @@
-format = """$directory$git_branch$git_status$character"""
+# Starship Prompt — Tokyo Night style
+# Only shows context-relevant modules (auto-detected)
+
+format = """$username$hostname$directory$git_branch$git_status$python$nodejs$bun$rust$docker_context$cmd_duration$line_break$character"""
+
+# Right prompt: time
+right_format = """$time"""
 
 [character]
-success_symbol = "[>](bold cyan)"
-error_symbol = "[x](bold cyan)"
+success_symbol = "[❯](bold #7aa2f7)"
+error_symbol = "[❯](bold #f7768e)"
+vimcmd_symbol = "[❮](bold #9ece6a)"
 
 [directory]
-truncation_length = 2
+truncation_length = 3
 truncate_to_repo = true
-style = "bold cyan"
+style = "bold #7aa2f7"
+read_only = " "
+home_symbol = "~"
 
 [git_branch]
-format = "[$branch]($style) "
-style = "italic cyan"
+format = "[$symbol$branch(:$remote_branch)]($style) "
+symbol = " "
+style = "#bb9af7"
 
 [git_status]
 format = '([$all_status$ahead_behind]($style) )'
-style = "cyan"
+style = "#e0af68"
 ahead = "↑"
 behind = "↓"
+diverged = "↕"
 untracked = "?"
 modified = "!"
 staged = "+"
+deleted = "✘"
+conflicted = "="
+
+[python]
+format = '[$symbol$version( \($virtualenv\))]($style) '
+symbol = " "
+style = "#e0af68"
+
+[nodejs]
+format = "[$symbol$version]($style) "
+symbol = " "
+style = "#9ece6a"
+
+[bun]
+format = "[$symbol$version]($style) "
+symbol = " "
+style = "#f7768e"
+
+[rust]
+format = "[$symbol$version]($style) "
+symbol = " "
+style = "#f7768e"
+
+[docker_context]
+format = "[$symbol$context]($style) "
+symbol = " "
+style = "#73daca"
+only_with_files = true
+
+[cmd_duration]
+min_time = 3000
+format = "[$duration]($style) "
+style = "#565f89"
+
+[username]
+show_always = false
+format = "[$user]($style)@"
+style_user = "#9ece6a"
+style_root = "bold #f7768e"
+
+[hostname]
+ssh_only = true
+format = "[$hostname]($style) "
+style = "#e0af68"
+
+[time]
+disabled = false
+format = "[$time]($style)"
+style = "#565f89"
+time_format = "%H:%M"
+
+[line_break]
+disabled = false
