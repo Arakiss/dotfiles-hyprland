@@ -81,6 +81,22 @@ echo "[imv]"
 link_dir "$DOTFILES/config/imv" "$HOME/.config/imv"
 echo "[walker]"
 link_dir "$DOTFILES/config/walker" "$HOME/.config/walker"
+echo "[swaync]"
+[[ -d "$DOTFILES/config/swaync" ]] && link_dir "$DOTFILES/config/swaync" "$HOME/.config/swaync"
+echo "[elephant]"
+[[ -d "$DOTFILES/config/elephant" ]] && link_dir "$DOTFILES/config/elephant" "$HOME/.config/elephant"
+echo "[uwsm]"
+[[ -d "$DOTFILES/config/uwsm" ]] && link_dir "$DOTFILES/config/uwsm" "$HOME/.config/uwsm"
+echo "[opencode]"
+[[ -d "$DOTFILES/config/opencode" ]] && link_dir "$DOTFILES/config/opencode" "$HOME/.config/opencode"
+echo "[wiremix]"
+[[ -d "$DOTFILES/config/wiremix" ]] && link_dir "$DOTFILES/config/wiremix" "$HOME/.config/wiremix"
+echo "[hyprland-preview-share-picker]"
+[[ -d "$DOTFILES/config/hyprland-preview-share-picker" ]] && link_dir "$DOTFILES/config/hyprland-preview-share-picker" "$HOME/.config/hyprland-preview-share-picker"
+echo "[omarchy]"
+mkdir -p "$HOME/.config/omarchy/hooks"
+mkdir -p "$HOME/.config/omarchy/themes"
+[[ -f "$DOTFILES/config/omarchy.ttf" ]] && link_file "$DOTFILES/config/omarchy.ttf" "$HOME/.config/omarchy.ttf"
 
 # environment.d
 echo "[environment.d]"
@@ -140,10 +156,10 @@ done
 # Theme
 echo ""
 echo "[theme]"
-mkdir -p "$HOME/.config/omarchy"
-CURRENT_THEME=$(cat "$HOME/.config/omarchy/current-theme" 2>/dev/null || echo "tokyo-night")
+mkdir -p "$HOME/.config/omarchy/current"
+CURRENT_THEME=$(cat "$HOME/.config/omarchy/current/theme.name" 2>/dev/null || cat "$HOME/.config/omarchy/current-theme" 2>/dev/null || echo "tokyo-night")
 echo "  Applying theme: $CURRENT_THEME"
-ln -sf "$DOTFILES/themes/$CURRENT_THEME" "$HOME/.config/omarchy/current"
+OMARCHY_PATH="$DOTFILES" omarchy-theme-set "$CURRENT_THEME" 2>/dev/null || true
 
 # GTK
 gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark" 2>/dev/null || true

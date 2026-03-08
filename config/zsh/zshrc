@@ -91,8 +91,9 @@ alias ss='grim -g "$(slurp)" - | wl-copy'
 alias ssf='grim - | wl-copy'
 alias sse='grim -g "$(slurp)" /tmp/screenshot.png && satty -f /tmp/screenshot.png 2>/dev/null || xdg-open /tmp/screenshot.png'
 
-# PATH
-export PATH="$HOME/.local/bin:$PATH"
+# Omarchy
+export OMARCHY_PATH="$HOME/.dotfiles"
+export PATH="$OMARCHY_PATH/bin:$HOME/.local/bin:$PATH"
 
 # Bun
 export BUN_INSTALL="$HOME/.bun"

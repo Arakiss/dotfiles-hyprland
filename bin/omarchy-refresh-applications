@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Ensure all default .desktop files are installed.
+
+OMARCHY_PATH=${OMARCHY_PATH:-$HOME/.dotfiles}
+
+# Copy .desktop declarations
+mkdir -p ~/.local/share/applications
+cp "$OMARCHY_PATH/applications/"*.desktop ~/.local/share/applications/ 2>/dev/null
+
+update-desktop-database ~/.local/share/applications

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Creates a new migration named after the unix timestamp of the last commit.
+
+OMARCHY_PATH=${OMARCHY_PATH:-$HOME/.dotfiles}
+cd "$OMARCHY_PATH"
+mkdir -p "$OMARCHY_PATH/migrations"
+migration_file="$OMARCHY_PATH/migrations/$(git log -1 --format=%cd --date=unix).sh"
+touch $migration_file
+
+if [[ $1 != "--no-edit" ]]; then
+  nvim $migration_file
+fi
+
+echo $migration_file

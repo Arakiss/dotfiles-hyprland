@@ -1,210 +1,176 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
 # Theme switcher - applies a theme to all components
-# Usage: omarchy-theme-set [theme-name]
+# Usage: omarchy-theme-set <theme-name>
 #        omarchy-theme-set  (interactive with rofi)
 
-THEMES_DIR="$HOME/.dotfiles/themes"
-CURRENT_LINK="$HOME/.config/omarchy/current"
-
-available_themes() {
-    ls -1 "$THEMES_DIR" 2>/dev/null
-}
+OMARCHY_PATH=${OMARCHY_PATH:-$HOME/.dotfiles}
+CURRENT_THEME_PATH="$HOME/.config/omarchy/current/theme"
+NEXT_THEME_PATH="$HOME/.config/omarchy/current/next-theme"
+USER_THEMES_PATH="$HOME/.config/omarchy/themes"
+OMARCHY_THEMES_PATH="$OMARCHY_PATH/themes"
 
 apply_theme() {
-    local theme="$1"
-    local theme_dir="$THEMES_DIR/$theme"
-    local colors="$theme_dir/colors.conf"
+  local THEME_NAME
+  THEME_NAME=$(echo "$1" | sed -E 's/<[^>]+>//g' | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
 
-    if [[ ! -f "$colors" ]]; then
-        echo "Theme '$theme' not found"
-        exit 1
-    fi
+  if [[ ! -d $OMARCHY_THEMES_PATH/$THEME_NAME ]] && [[ ! -d $USER_THEMES_PATH/$THEME_NAME ]]; then
+    echo "Theme '$THEME_NAME' does not exist"
+    exit 1
+  fi
 
-    # Source theme colors
-    source "$colors"
+  # Setup clean next theme directory (for atomic theme config swapping)
+  rm -rf "$NEXT_THEME_PATH"
+  mkdir -p "$NEXT_THEME_PATH"
 
-    # Update current theme link
-    mkdir -p "$HOME/.config/omarchy"
-    rm -f "$CURRENT_LINK"
-    ln -sf "$theme_dir" "$CURRENT_LINK"
-    echo "$theme" > "$HOME/.config/omarchy/current-theme"
+  # Copy official theme first, then overlay user customizations on top
+  cp -r "$OMARCHY_THEMES_PATH/$THEME_NAME/"* "$NEXT_THEME_PATH/" 2>/dev/null
+  cp -r "$USER_THEMES_PATH/$THEME_NAME/"* "$NEXT_THEME_PATH/" 2>/dev/null
 
-    # --- Waybar ---
-    local waybar_css="$HOME/.config/waybar/style.css"
-    if [[ -f "$waybar_css" ]]; then
-        sed -i \
-            -e "s/@define-color bg .*/@define-color bg $BG;/" \
-            -e "s/@define-color bg-alt .*/@define-color bg-alt $BG_ALT;/" \
-            -e "s/@define-color fg .*/@define-color fg $FG;/" \
-            -e "s/@define-color accent .*/@define-color accent $ACCENT;/" \
-            -e "s/@define-color accent2 .*/@define-color accent2 $ACCENT2;/" \
-            -e "s/@define-color red .*/@define-color red $RED;/" \
-            -e "s/@define-color green .*/@define-color green $GREEN;/" \
-            -e "s/@define-color yellow .*/@define-color yellow $YELLOW;/" \
-            "$waybar_css"
-    fi
+  # Generate dynamic configs via template engine
+  omarchy-theme-set-templates
 
-    # --- Hyprland borders ---
+  # Swap next theme in as current
+  rm -rf "$CURRENT_THEME_PATH"
+  mv "$NEXT_THEME_PATH" "$CURRENT_THEME_PATH"
+
+  # Store theme name for reference
+  echo "$THEME_NAME" >"$HOME/.config/omarchy/current/theme.name"
+
+  # Source colors.conf for inline sed replacements (swaync, rofi, nvim, hyprlock)
+  local colors_conf="$OMARCHY_THEMES_PATH/$THEME_NAME/colors.conf"
+  [[ -f "$colors_conf" ]] && source "$colors_conf"
+
+  # --- Waybar (via sed for user's custom style.css) ---
+  local waybar_css="$HOME/.config/waybar/style.css"
+  if [[ -f "$waybar_css" ]] && [[ -n "$BG" ]]; then
+    sed -i \
+      -e "s/@define-color bg .*/@define-color bg $BG;/" \
+      -e "s/@define-color bg-alt .*/@define-color bg-alt $BG_ALT;/" \
+      -e "s/@define-color fg .*/@define-color fg $FG;/" \
+      -e "s/@define-color accent .*/@define-color accent $ACCENT;/" \
+      -e "s/@define-color accent2 .*/@define-color accent2 $ACCENT2;/" \
+      -e "s/@define-color red .*/@define-color red $RED;/" \
+      -e "s/@define-color green .*/@define-color green $GREEN;/" \
+      -e "s/@define-color yellow .*/@define-color yellow $YELLOW;/" \
+      "$waybar_css"
+  fi
+
+  # --- SwayNC ---
+  local swaync_css="$HOME/.config/swaync/style.css"
+  if [[ -f "$swaync_css" ]] && [[ -n "$BG" ]]; then
+    sed -i \
+      -e "s/@define-color bg .*/@define-color bg ${BG};/" \
+      -e "s/@define-color bg-alt .*/@define-color bg-alt ${BG_ALT};/" \
+      -e "s/@define-color bg-surface .*/@define-color bg-surface ${SELECTION_BG:-$BG_ALT};/" \
+      -e "s/@define-color fg .*/@define-color fg ${FG};/" \
+      -e "s/@define-color fg-dim .*/@define-color fg-dim ${FG_DIM};/" \
+      -e "s/@define-color accent .*/@define-color accent ${ACCENT};/" \
+      -e "s/@define-color accent2 .*/@define-color accent2 ${ACCENT2};/" \
+      -e "s/@define-color red .*/@define-color red ${RED};/" \
+      -e "s/@define-color green .*/@define-color green ${GREEN};/" \
+      -e "s/@define-color yellow .*/@define-color yellow ${YELLOW};/" \
+      -e "s/@define-color blue .*/@define-color blue ${BLUE};/" \
+      -e "s/@define-color magenta .*/@define-color magenta ${MAGENTA};/" \
+      -e "s/@define-color cyan .*/@define-color cyan ${CYAN};/" \
+      "$swaync_css"
+    swaync-client -rs 2>/dev/null
+  fi
+
+  # --- Rofi ---
+  local rofi_conf="$HOME/.config/rofi/config.rasi"
+  if [[ -f "$rofi_conf" ]] && [[ -n "$BG" ]]; then
+    sed -i \
+      -e "s|bg:       .*|bg:       ${BG}ee;|" \
+      -e "s|bg-alt:   .*|bg-alt:   ${BG_ALT};|" \
+      -e "s|fg:       .*|fg:       ${FG};|" \
+      -e "s|accent:   .*|accent:   ${ACCENT};|" \
+      -e "s|accent2:  .*|accent2:  ${ACCENT2};|" \
+      -e "s|urgent:   .*|urgent:   ${RED};|" \
+      "$rofi_conf"
+  fi
+
+  # --- Hyprland borders ---
+  if [[ -n "$ACCENT" ]]; then
     hyprctl keyword general:col.active_border "rgba(${ACCENT:1}ee) rgba(${ACCENT2:1}ee) 45deg" 2>/dev/null
     hyprctl keyword general:col.inactive_border "rgba(${BRIGHT_BLACK:1}aa)" 2>/dev/null
+  fi
 
-    # --- SwayNC ---
-    local swaync_css="$HOME/.config/swaync/style.css"
-    if [[ -f "$swaync_css" ]]; then
-        sed -i \
-            -e "s/@define-color bg .*/@define-color bg ${BG};/" \
-            -e "s/@define-color bg-alt .*/@define-color bg-alt ${BG_ALT};/" \
-            -e "s/@define-color bg-surface .*/@define-color bg-surface ${SELECTION_BG:-$BG_ALT};/" \
-            -e "s/@define-color fg .*/@define-color fg ${FG};/" \
-            -e "s/@define-color fg-dim .*/@define-color fg-dim ${FG_DIM};/" \
-            -e "s/@define-color accent .*/@define-color accent ${ACCENT};/" \
-            -e "s/@define-color accent2 .*/@define-color accent2 ${ACCENT2};/" \
-            -e "s/@define-color red .*/@define-color red ${RED};/" \
-            -e "s/@define-color green .*/@define-color green ${GREEN};/" \
-            -e "s/@define-color yellow .*/@define-color yellow ${YELLOW};/" \
-            -e "s/@define-color blue .*/@define-color blue ${BLUE};/" \
-            -e "s/@define-color magenta .*/@define-color magenta ${MAGENTA};/" \
-            -e "s/@define-color cyan .*/@define-color cyan ${CYAN};/" \
-            "$swaync_css"
-        swaync-client -rs 2>/dev/null
+  # --- Hyprlock ---
+  local hyprlock_conf="$HOME/.config/hypr/hyprlock.conf"
+  if [[ -f "$hyprlock_conf" ]] && [[ -n "$ACCENT" ]]; then
+    sed -i \
+      -e "s/outer_color = .*/outer_color = rgb(${ACCENT:1})/" \
+      -e "s/inner_color = .*/inner_color = rgb(${BG:1})/" \
+      -e "s/font_color = .*/font_color = rgb(${FG:1})/" \
+      "$hyprlock_conf"
+  fi
+
+  # --- GTK ---
+  gsettings set org.gnome.desktop.interface gtk-theme "${GTK_THEME:-Adwaita-dark}" 2>/dev/null
+  gsettings set org.gnome.desktop.interface icon-theme "${ICON_THEME:-Yaru}" 2>/dev/null
+  gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" 2>/dev/null
+
+  # --- Neovim colorscheme ---
+  local nvim_colorscheme=""
+  case "$THEME_NAME" in
+    tokyo-night)      nvim_colorscheme="tokyonight-night" ;;
+    catppuccin)       nvim_colorscheme="catppuccin-mocha" ;;
+    catppuccin-latte) nvim_colorscheme="catppuccin-latte" ;;
+    gruvbox)          nvim_colorscheme="gruvbox" ;;
+    nord)             nvim_colorscheme="nord" ;;
+    rose-pine)        nvim_colorscheme="rose-pine" ;;
+    kanagawa)         nvim_colorscheme="kanagawa" ;;
+    everforest)       nvim_colorscheme="everforest" ;;
+    miasma)           nvim_colorscheme="miasma" ;;
+    hackerman|matte-black|vantablack|osaka-jade)
+                      nvim_colorscheme="tokyonight-night" ;;
+    ethereal|ristretto)
+                      nvim_colorscheme="catppuccin-mocha" ;;
+    flexoki-light|white)
+                      nvim_colorscheme="tokyonight-day" ;;
+  esac
+  if [[ -n "$nvim_colorscheme" ]]; then
+    local nvim_colors="$HOME/.config/nvim/lua/plugins/colorschemes.lua"
+    if [[ -f "$nvim_colors" ]]; then
+      sed -i "s/colorscheme = \".*\"/colorscheme = \"$nvim_colorscheme\"/" "$nvim_colors"
     fi
+    for sock in /run/user/$(id -u)/nvim.*.0 /tmp/nvim.*/0; do
+      [[ -S "$sock" ]] && nvim --server "$sock" --remote-send "<cmd>colorscheme $nvim_colorscheme<cr>" 2>/dev/null
+    done
+  fi
 
-    # --- Alacritty ---
-    local alacritty_conf="$HOME/.config/alacritty/alacritty.toml"
-    if [[ -f "$alacritty_conf" ]]; then
-        sed -i \
-            -e "s/^background = .*/background = \"$BG\"/" \
-            -e "s/^foreground = .*/foreground = \"$FG\"/" \
-            -e "s/^black = .*/black = \"$BLACK\"/" \
-            -e "s/^red = .*/red = \"$RED\"/" \
-            -e "s/^green = .*/green = \"$GREEN\"/" \
-            -e "s/^yellow = .*/yellow = \"$YELLOW\"/" \
-            -e "s/^blue = .*/blue = \"$BLUE\"/" \
-            -e "s/^magenta = .*/magenta = \"$MAGENTA\"/" \
-            -e "s/^cyan = .*/cyan = \"$CYAN\"/" \
-            -e "s/^white = .*/white = \"$WHITE\"/" \
-            "$alacritty_conf"
-    fi
+  # Change background with theme
+  omarchy-theme-bg-next
 
-    # --- Kitty ---
-    local kitty_conf="$HOME/.config/kitty/kitty.conf"
-    if [[ -f "$kitty_conf" ]]; then
-        sed -i \
-            -e "s/^foreground .*/foreground $FG/" \
-            -e "s/^background .*/background $BG/" \
-            -e "s/^selection_foreground .*/selection_foreground $SELECTION_FG/" \
-            -e "s/^selection_background .*/selection_background $SELECTION_BG/" \
-            -e "s/^cursor .*/cursor $CURSOR/" \
-            -e "s/^cursor_text_color .*/cursor_text_color $BG/" \
-            -e "s/^color0 .*/color0  $BLACK/" \
-            -e "s/^color1 .*/color1  $RED/" \
-            -e "s/^color2 .*/color2  $GREEN/" \
-            -e "s/^color3 .*/color3  $YELLOW/" \
-            -e "s/^color4 .*/color4  $BLUE/" \
-            -e "s/^color5 .*/color5  $MAGENTA/" \
-            -e "s/^color6 .*/color6  $CYAN/" \
-            -e "s/^color7 .*/color7  $WHITE/" \
-            -e "s/^color8 .*/color8  $BRIGHT_BLACK/" \
-            -e "s/^color9 .*/color9  $RED/" \
-            -e "s/^color10 .*/color10 $GREEN/" \
-            -e "s/^color11 .*/color11 $YELLOW/" \
-            -e "s/^color12 .*/color12 $BLUE/" \
-            -e "s/^color13 .*/color13 $MAGENTA/" \
-            -e "s/^color14 .*/color14 $CYAN/" \
-            -e "s/^color15 .*/color15 $WHITE/" \
-            "$kitty_conf"
-    fi
+  # Restart components to apply new theme
+  if pgrep -x waybar >/dev/null; then
+    omarchy-restart-waybar
+  fi
+  omarchy-restart-swayosd 2>/dev/null
+  omarchy-restart-btop 2>/dev/null
 
-    # --- Rofi ---
-    local rofi_conf="$HOME/.config/rofi/config.rasi"
-    if [[ -f "$rofi_conf" ]]; then
-        sed -i \
-            -e "s|bg:       .*|bg:       ${BG}ee;|" \
-            -e "s|bg-alt:   .*|bg-alt:   ${BG_ALT};|" \
-            -e "s|fg:       .*|fg:       ${FG};|" \
-            -e "s|accent:   .*|accent:   ${ACCENT};|" \
-            -e "s|accent2:  .*|accent2:  ${ACCENT2};|" \
-            -e "s|urgent:   .*|urgent:   ${RED};|" \
-            "$rofi_conf"
-    fi
+  # Change app-specific themes
+  omarchy-theme-set-gnome 2>/dev/null
+  omarchy-theme-set-browser 2>/dev/null
+  omarchy-theme-set-vscode 2>/dev/null
+  omarchy-theme-set-obsidian 2>/dev/null
+  omarchy-theme-set-keyboard 2>/dev/null
 
-    # --- GTK ---
-    gsettings set org.gnome.desktop.interface gtk-theme "$GTK_THEME" 2>/dev/null
-    gsettings set org.gnome.desktop.interface icon-theme "$ICON_THEME" 2>/dev/null
-    gsettings set org.gnome.desktop.interface color-scheme "prefer-dark" 2>/dev/null
+  # Call hook on theme set
+  omarchy-hook theme-set "$THEME_NAME"
 
-    # --- Hyprlock ---
-    local hyprlock_conf="$HOME/.config/hypr/hyprlock.conf"
-    if [[ -f "$hyprlock_conf" ]]; then
-        sed -i \
-            -e "s/outer_color = .*/outer_color = rgb(${ACCENT:1})/" \
-            -e "s/inner_color = .*/inner_color = rgb(${BG:1})/" \
-            -e "s/font_color = .*/font_color = rgb(${FG:1})/" \
-            -e "s/color = rgb(a9b1d6)/color = rgb(${FG:1})/" \
-            -e "s/color = rgb(7aa2f7)/color = rgb(${ACCENT:1})/" \
-            "$hyprlock_conf"
-    fi
-
-    # --- Neovim ---
-    # Map theme names to neovim colorschemes
-    local nvim_colorscheme=""
-    case "$theme" in
-        tokyo-night)      nvim_colorscheme="tokyonight-night" ;;
-        catppuccin)       nvim_colorscheme="catppuccin-mocha" ;;
-        catppuccin-latte) nvim_colorscheme="catppuccin-latte" ;;
-        gruvbox)          nvim_colorscheme="gruvbox" ;;
-        nord)             nvim_colorscheme="nord" ;;
-        rose-pine)        nvim_colorscheme="rose-pine" ;;
-        kanagawa)         nvim_colorscheme="kanagawa" ;;
-        everforest)       nvim_colorscheme="everforest" ;;
-        miasma)           nvim_colorscheme="miasma" ;;
-        hackerman|matte-black|vantablack|osaka-jade)
-                          nvim_colorscheme="tokyonight-night" ;;
-        ethereal|ristretto)
-                          nvim_colorscheme="catppuccin-mocha" ;;
-        flexoki-light|white)
-                          nvim_colorscheme="tokyonight-day" ;;
-    esac
-    if [[ -n "$nvim_colorscheme" ]]; then
-        local nvim_colors="$HOME/.config/nvim/lua/plugins/colorschemes.lua"
-        if [[ -f "$nvim_colors" ]]; then
-            sed -i "s/colorscheme = \".*\"/colorscheme = \"$nvim_colorscheme\"/" "$nvim_colors"
-        fi
-        # Apply to running neovim instances
-        for sock in /run/user/$(id -u)/nvim.*.0 /tmp/nvim.*/0; do
-            [[ -S "$sock" ]] && nvim --server "$sock" --remote-send "<cmd>colorscheme $nvim_colorscheme<cr>" 2>/dev/null
-        done
-    fi
-
-    # Restart waybar to pick up new styles
-    killall waybar 2>/dev/null
-    waybar &>/dev/null &
-    disown
-
-    # Set wallpaper if theme has backgrounds
-    if [[ -d "$theme_dir/backgrounds" ]]; then
-        local wallpaper
-        wallpaper=$(find "$theme_dir/backgrounds" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" -o -name "*.gif" \) | shuf -n 1)
-        if [[ -n "$wallpaper" ]]; then
-            ln -sf "$wallpaper" "$HOME/.config/omarchy/current/wallpaper"
-            swww img "$wallpaper" \
-                --transition-type fade \
-                --transition-duration 2 \
-                --transition-fps 60
-        fi
-    fi
-
-    notify-send "Theme" "Applied: $THEME_NAME" -t 3000 2>/dev/null
-    echo "Theme '$THEME_NAME' applied!"
+  notify-send "Theme" "Applied: $THEME_NAME" -t 3000 2>/dev/null
+  echo "Theme '$THEME_NAME' applied!"
 }
 
 # Main
 if [[ -n "$1" ]]; then
-    apply_theme "$1"
+  apply_theme "$1"
 else
-    # Interactive mode with rofi
-    theme=$(available_themes | rofi -dmenu -p "Theme" -i 2>/dev/null)
-    if [[ -n "$theme" ]]; then
-        apply_theme "$theme"
-    fi
+  # Interactive mode with rofi
+  theme=$(ls -1 "$OMARCHY_THEMES_PATH" 2>/dev/null | rofi -dmenu -p "Theme" -i 2>/dev/null)
+  if [[ -n "$theme" ]]; then
+    apply_theme "$theme"
+  fi
 fi

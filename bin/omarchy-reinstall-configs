@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+# Overwrite all user configs with the dotfiles defaults.
+
+if (( EUID == 0 )); then
+  echo "Error: This script should not be run as root"
+  exit 1
+fi
+
+OMARCHY_PATH=${OMARCHY_PATH:-$HOME/.dotfiles}
+
+echo "Resetting all configs from dotfiles"
+bash "$OMARCHY_PATH/bin/omarchy-install"

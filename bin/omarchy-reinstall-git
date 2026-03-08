@@ -1,0 +1,6 @@
+#!/bin/bash
+set -e
+
+# Reinstall the dotfiles from the git source.
+
+git -C "$HOME/.dotfiles" pull --rebase origin main
