@@ -1,0 +1,11 @@
+[Plymouth Theme]
+Name=CachyOS Hyprland
+Description=Minimal boot splash with Tokyo Night colors for CachyOS + Hyprland
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/cachyos-hyprland
+ScriptFile=/usr/share/plymouth/themes/cachyos-hyprland/cachyos-hyprland.script
+ConsoleLogBackgroundColor=0x1a1b26
+MonospaceFont=JetBrainsMono Nerd Font 11
+Font=JetBrainsMono Nerd Font 11

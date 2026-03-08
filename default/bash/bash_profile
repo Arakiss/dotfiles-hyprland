@@ -1,0 +1,5 @@
+#
+# CachyOS Hyprland — Bash profile
+#
+
+[[ -f ~/.bashrc ]] && . ~/.bashrc

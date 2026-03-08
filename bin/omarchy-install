@@ -146,6 +146,13 @@ link_file "$DOTFILES/config/git/config" "$HOME/.config/git/config"
 echo "[zsh]"
 link_file "$DOTFILES/config/zsh/zshrc" "$HOME/.zshrc"
 
+# Bash (fallback)
+echo "[bash]"
+if [[ -f "$DOTFILES/default/bash/bashrc" ]]; then
+    link_file "$DOTFILES/default/bash/bashrc" "$HOME/.bashrc"
+    link_file "$DOTFILES/default/bash/bash_profile" "$HOME/.bash_profile"
+fi
+
 # Scripts
 echo "[scripts]"
 mkdir -p "$HOME/.local/bin"

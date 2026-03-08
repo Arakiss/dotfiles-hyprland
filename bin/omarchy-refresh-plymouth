@@ -1,12 +1,30 @@
 #!/bin/bash
 
-# Overwrite the user config for the Plymouth drive decryption and boot sequence with the Omarchy default and rebuild it.
+# Install/refresh the CachyOS Hyprland Plymouth boot splash theme
 
-sudo cp ~/.dotfiles/default/plymouth/* /usr/share/plymouth/themes/omarchy/
-sudo plymouth-set-default-theme omarchy
+OMARCHY_PATH=${OMARCHY_PATH:-$HOME/.dotfiles}
+THEME_NAME="cachyos-hyprland"
+THEME_DIR="/usr/share/plymouth/themes/$THEME_NAME"
+
+echo -e "\e[32mInstalling Plymouth theme: $THEME_NAME\e[0m"
+
+sudo mkdir -p "$THEME_DIR"
+sudo cp "$OMARCHY_PATH/default/plymouth/$THEME_NAME.plymouth" "$THEME_DIR/"
+sudo cp "$OMARCHY_PATH/default/plymouth/$THEME_NAME.script" "$THEME_DIR/"
+
+# Copy CachyOS boot animation assets for reuse (logo, progress bar images)
+if [[ -d /usr/share/plymouth/themes/cachyos-bootanimation ]]; then
+  for img in lock.png entry.png bullet.png; do
+    sudo cp "/usr/share/plymouth/themes/cachyos-bootanimation/$img" "$THEME_DIR/" 2>/dev/null
+  done
+fi
+
+sudo plymouth-set-default-theme "$THEME_NAME"
 
 if command -v limine-mkinitcpio &>/dev/null; then
   sudo limine-mkinitcpio
 else
   sudo mkinitcpio -P
 fi
+
+echo -e "\e[32mDone. Plymouth theme set to $THEME_NAME\e[0m"

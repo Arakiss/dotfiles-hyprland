@@ -1,6 +1,23 @@
 #!/bin/bash
 
-# Refresh the SDDM theme from default
+# Install/refresh the CachyOS Hyprland SDDM theme
 
-sudo rm -rf /usr/share/sddm/themes/omarchy
-sudo cp -r $OMARCHY_PATH/default/sddm/omarchy /usr/share/sddm/themes/omarchy
+OMARCHY_PATH=${OMARCHY_PATH:-$HOME/.dotfiles}
+THEME_NAME="cachyos-hyprland"
+
+echo -e "\e[32mInstalling SDDM theme: $THEME_NAME\e[0m"
+
+sudo rm -rf "/usr/share/sddm/themes/$THEME_NAME"
+sudo cp -r "$OMARCHY_PATH/default/sddm/$THEME_NAME" "/usr/share/sddm/themes/$THEME_NAME"
+
+# Set as default theme
+sudo mkdir -p /etc/sddm.conf.d
+sudo tee /etc/sddm.conf.d/theme.conf >/dev/null <<EOF
+[Theme]
+Current=$THEME_NAME
+
+[Autologin]
+Session=hyprland
+EOF
+
+echo -e "\e[32mDone. SDDM theme set to $THEME_NAME\e[0m"

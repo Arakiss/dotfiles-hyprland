@@ -1,24 +1,14 @@
 #!/bin/bash
 
-# Overwrite the package configuration for /etc/pacman with the Omarchy default of using its dedicated mirrors and repositories, then update all packages.
-# This is used after switching between Omarchy release channels to ensure the right packages for the right channel are available.
+# Restore pacman.conf from dotfiles default (CachyOS optimized)
+# Unlike Omarchy, CachyOS manages its own mirrors, so we only restore the main config.
 
-# Take backup of existing files
-sudo cp -f /etc/pacman.conf /etc/pacman.conf.bak
-sudo cp -f /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+OMARCHY_PATH=${OMARCHY_PATH:-$HOME/.dotfiles}
 
-channel="${1:-stable}"
+echo -e "\e[32mRestoring pacman.conf from dotfiles default\e[0m"
 
-if [[ $channel != "stable" && $channel != "rc" && $channel != "edge" ]]; then
-  echo "Error: Invalid channel '$channel'. Must be one of: stable, rc, edge"
-  exit 1
-fi
+sudo cp -f /etc/pacman.conf "/etc/pacman.conf.bak.$(date +%s)"
+sudo cp -f "$OMARCHY_PATH/default/pacman/pacman.conf" /etc/pacman.conf
 
-echo "Setting channel to $channel"
-echo
-
-sudo cp -f "$OMARCHY_PATH/default/pacman/pacman-$channel.conf" /etc/pacman.conf
-sudo cp -f "$OMARCHY_PATH/default/pacman/mirrorlist-$channel" /etc/pacman.d/mirrorlist
-
-# Reset all package DBs and then update
-sudo pacman -Syyuu --noconfirm
+echo -e "\e[32mDone. Previous config backed up.\e[0m"
+echo "Run 'sudo pacman -Syyu' to refresh package databases."

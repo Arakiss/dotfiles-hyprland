@@ -1,0 +1,63 @@
+#
+# CachyOS Hyprland — Bash fallback config
+# Primary shell is zsh, this is for scripts and emergency sessions
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# Omarchy environment
+export OMARCHY_PATH="$HOME/.dotfiles"
+export PATH="$OMARCHY_PATH/bin:$HOME/.local/bin:$PATH"
+export EDITOR=nvim
+export TERMINAL=ghostty
+
+# History
+HISTSIZE=10000
+HISTFILESIZE=20000
+HISTCONTROL=ignoreboth:erasedups
+shopt -s histappend
+
+# Shell options
+shopt -s checkwinsize
+shopt -s cdspell
+shopt -s dirspell
+shopt -s globstar 2>/dev/null
+
+# Prompt — minimal Tokyo Night style
+PS1='\[\e[38;5;75m\]\w\[\e[0m\] \[\e[38;5;103m\]❯\[\e[0m\] '
+
+# Modern CLI aliases (if available)
+command -v eza &>/dev/null && alias ls='eza --icons' && alias ll='eza -la --icons --group-directories-first'
+command -v bat &>/dev/null && alias cat='bat --style=plain'
+command -v dust &>/dev/null && alias du='dust'
+command -v zoxide &>/dev/null && eval "$(zoxide init bash)" && alias cd='z'
+
+# Basic aliases
+alias n='nvim'
+alias g='git'
+alias lg='lazygit'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias cls='clear'
+alias open='xdg-open'
+
+# Git aliases
+alias gs='git status'
+alias gd='git diff'
+alias gp='git push'
+alias gl='git pull'
+alias glog='git log --oneline --graph --decorate -15'
+
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+[[ -d "$BUN_INSTALL" ]] && export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Starship prompt (overrides PS1 if available)
+command -v starship &>/dev/null && eval "$(starship init bash)"
+
+# Fastfetch on first shell
+if [[ -z "$OMARCHY_GREETED" ]]; then
+    export OMARCHY_GREETED=1
+    command -v fastfetch &>/dev/null && fastfetch
+fi
