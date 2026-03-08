@@ -1,0 +1,34 @@
+#!/bin/bash
+# Disable suspend/hibernate system-wide.
+# This machine runs as a server — monitors turn off, system never sleeps.
+# See docs/power-management.md for details.
+
+set -e
+
+echo "Disabling suspend/hibernate..."
+
+# Mask all sleep targets
+sudo systemctl mask \
+    sleep.target \
+    suspend.target \
+    hibernate.target \
+    hybrid-sleep.target \
+    suspend-then-hibernate.target
+
+# Create logind override
+sudo mkdir -p /etc/systemd/logind.conf.d
+sudo tee /etc/systemd/logind.conf.d/no-suspend.conf > /dev/null << 'EOF'
+[Login]
+HandleSuspendKey=ignore
+HandleHibernateKey=ignore
+HandleLidSwitch=ignore
+HandleLidSwitchExternalPower=ignore
+HandleLidSwitchDocked=ignore
+EOF
+
+# Reload logind config without killing active sessions
+# NEVER use 'systemctl restart systemd-logind' — it destroys graphical sessions
+sudo systemctl kill -s HUP systemd-logind
+
+echo "Done. Suspend/hibernate disabled. Verify with:"
+echo "  systemctl status sleep.target suspend.target hibernate.target"

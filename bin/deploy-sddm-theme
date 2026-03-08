@@ -1,0 +1,38 @@
+#!/bin/bash
+# Deploy the custom SDDM theme to the system.
+# Usage: sudo ~/.dotfiles/bin/deploy-sddm-theme
+
+set -e
+
+THEME_SRC="$HOME/.dotfiles/default/sddm/cachyos-hyprland"
+THEME_DST="/usr/share/sddm/themes/cachyos-hyprland"
+SDDM_CONF="/etc/sddm.conf.d/theme.conf"
+
+if [[ $EUID -ne 0 ]]; then
+    echo "Este script necesita sudo: sudo $0" >&2
+    exit 1
+fi
+
+# Resolve home if running via sudo
+if [[ -n $SUDO_USER ]]; then
+    THEME_SRC="$(eval echo ~$SUDO_USER)/.dotfiles/default/sddm/cachyos-hyprland"
+fi
+
+if [[ ! -d $THEME_SRC ]]; then
+    echo "No se encontró el tema en $THEME_SRC" >&2
+    exit 1
+fi
+
+mkdir -p "$THEME_DST"
+cp "$THEME_SRC/Main.qml" "$THEME_DST/"
+cp "$THEME_SRC/theme.conf" "$THEME_DST/"
+cp "$THEME_SRC/metadata.desktop" "$THEME_DST/"
+
+mkdir -p "$(dirname "$SDDM_CONF")"
+printf '[Theme]\nCurrent=cachyos-hyprland\n' > "$SDDM_CONF"
+
+echo "Tema SDDM desplegado correctamente:"
+echo "  Archivos: $THEME_DST/"
+echo "  Config:   $SDDM_CONF"
+cat "$SDDM_CONF"
+head -2 "$THEME_DST/Main.qml"
