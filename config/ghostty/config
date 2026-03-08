@@ -41,7 +41,7 @@ minimum-contrast = 1.1
 
 # Mouse
 copy-on-select = clipboard
-mouse-scroll-multiplier = 0.95
+mouse-scroll-multiplier = 3
 
 # Fix Hyprland rendering performance
 # https://github.com/ghostty-org/ghostty/discussions/3224

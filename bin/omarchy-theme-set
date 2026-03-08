@@ -48,15 +48,25 @@ apply_theme() {
     hyprctl keyword general:col.active_border "rgba(${ACCENT:1}ee) rgba(${ACCENT2:1}ee) 45deg" 2>/dev/null
     hyprctl keyword general:col.inactive_border "rgba(${BRIGHT_BLACK:1}aa)" 2>/dev/null
 
-    # --- Mako ---
-    local mako_conf="$HOME/.config/mako/config"
-    if [[ -f "$mako_conf" ]]; then
+    # --- SwayNC ---
+    local swaync_css="$HOME/.config/swaync/style.css"
+    if [[ -f "$swaync_css" ]]; then
         sed -i \
-            -e "s/^background-color=.*/background-color=${BG}ee/" \
-            -e "s/^text-color=.*/text-color=${FG}/" \
-            -e "s/^border-color=.*/border-color=${ACCENT}/" \
-            "$mako_conf"
-        makoctl reload 2>/dev/null
+            -e "s/@define-color bg .*/@define-color bg ${BG};/" \
+            -e "s/@define-color bg-alt .*/@define-color bg-alt ${BG_ALT};/" \
+            -e "s/@define-color bg-surface .*/@define-color bg-surface ${SELECTION_BG:-$BG_ALT};/" \
+            -e "s/@define-color fg .*/@define-color fg ${FG};/" \
+            -e "s/@define-color fg-dim .*/@define-color fg-dim ${FG_DIM};/" \
+            -e "s/@define-color accent .*/@define-color accent ${ACCENT};/" \
+            -e "s/@define-color accent2 .*/@define-color accent2 ${ACCENT2};/" \
+            -e "s/@define-color red .*/@define-color red ${RED};/" \
+            -e "s/@define-color green .*/@define-color green ${GREEN};/" \
+            -e "s/@define-color yellow .*/@define-color yellow ${YELLOW};/" \
+            -e "s/@define-color blue .*/@define-color blue ${BLUE};/" \
+            -e "s/@define-color magenta .*/@define-color magenta ${MAGENTA};/" \
+            -e "s/@define-color cyan .*/@define-color cyan ${CYAN};/" \
+            "$swaync_css"
+        swaync-client -rs 2>/dev/null
     fi
 
     # --- Alacritty ---

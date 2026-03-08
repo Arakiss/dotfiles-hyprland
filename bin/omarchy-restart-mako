@@ -1,5 +1,6 @@
 #!/bin/bash
 
-# Reload mako configuration (used by the Omarchy theme switching).
+# Reload swaync configuration (used by the Omarchy theme switching).
+# Legacy name kept for compatibility.
 
-makoctl reload
+swaync-client -rs

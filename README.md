@@ -7,12 +7,12 @@ A curated, modular desktop environment built around the Tokyo Night aesthetic wi
 ## Features
 
 - **17 color themes** with 41 curated wallpapers — Tokyo Night, Catppuccin, Nord, Gruvbox, Hackerman, Rose Pine, and more
-- **One-command theme switching** that updates Hyprland, Waybar, Ghostty, Rofi, Mako, Hyprlock, btop, and GTK simultaneously
+- **One-command theme switching** that updates Hyprland, Waybar, Ghostty, Rofi, SwayNC, Hyprlock, btop, and GTK simultaneously
 - **Ghostty terminal** with 5 themes, 4 presets, 5 font configs, tmux integration, and a `gconfig` switcher
 - **Modular Hyprland config** — split into bindings, input, look-and-feel, apps, autostart, and environment files
 - **95+ utility scripts** — system toggles, app launchers, restart helpers, package management, and theme tools
 - **Dual-monitor setup** with machine-specific config separation (local overrides stay out of the repo)
-- **Wayland-native stack** — swaybg, grim+slurp, cliphist, mako, hyprlock, hypridle, swayosd
+- **Wayland-native stack** — swaybg, grim+slurp, cliphist, swaync, hyprlock, hypridle, swayosd
 
 ## Stack
 
@@ -22,7 +22,7 @@ A curated, modular desktop environment built around the Tokyo Night aesthetic wi
 | Bar            | [Waybar](https://github.com/Alexays/Waybar)                                                     |
 | Terminal       | [Ghostty](https://ghostty.org) (primary) / [Alacritty](https://alacritty.org) (secondary)       |
 | Launcher       | [Rofi](https://github.com/lbonn/rofi) (Wayland fork)                                            |
-| Notifications  | [Mako](https://github.com/emersion/mako)                                                        |
+| Notifications  | [SwayNC](https://github.com/ErikReider/SwayNotificationCenter) — CSS-themed, notification panel |
 | Shell          | Zsh + [Starship](https://starship.rs)                                                           |
 | Multiplexer    | [tmux](https://github.com/tmux/tmux)                                                            |
 | Editor         | [Neovim](https://neovim.io) + LazyVim                                                           |
@@ -47,7 +47,7 @@ A curated, modular desktop environment built around the Tokyo Night aesthetic wi
 │   │   ├── tmux/           # Matching tmux config
 │   │   └── gconfig         # Quick switcher script
 │   ├── alacritty/          # Secondary terminal
-│   ├── mako/               # Notifications
+│   ├── swaync/             # Notifications (CSS-themed panel)
 │   ├── rofi/               # Launcher theme
 │   ├── tmux/               # Ctrl+Space prefix
 │   ├── btop/               # System monitor
@@ -92,7 +92,7 @@ A curated, modular desktop environment built around the Tokyo Night aesthetic wi
 ```bash
 paru -S --needed \
   hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
-  waybar mako rofi-wayland swaybg swayosd-git \
+  waybar swaync rofi-wayland swaybg swayosd-git \
   ghostty alacritty \
   grim slurp satty wl-clipboard cliphist \
   zsh starship zoxide fzf zsh-autosuggestions zsh-syntax-highlighting \
@@ -205,16 +205,18 @@ All bindings use `SUPER` (Windows key) as the main modifier.
 
 ### System
 
-| Binding                        | Action                 |
-| ------------------------------ | ---------------------- |
-| `SUPER + Ctrl + Space`         | Next wallpaper         |
-| `SUPER + Ctrl + Shift + Space` | Theme switcher         |
-| `SUPER + L`                    | Lock screen            |
-| `SUPER + V`                    | Clipboard history      |
-| `SUPER + B`                    | Toggle Waybar          |
-| `Print`                        | Screenshot (full)      |
-| `SUPER + Print`                | Screenshot (area)      |
-| `SUPER + F1`                   | Keybindings cheatsheet |
+| Binding                        | Action                  |
+| ------------------------------ | ----------------------- |
+| `SUPER + Ctrl + Space`         | Next wallpaper          |
+| `SUPER + Ctrl + Shift + Space` | Theme switcher          |
+| `SUPER + L`                    | Lock screen             |
+| `SUPER + V`                    | Clipboard history       |
+| `SUPER + N`                    | Notification panel      |
+| `SUPER + Shift + N`            | Clear all notifications |
+| `SUPER + B`                    | Toggle Waybar           |
+| `Print`                        | Screenshot (full)       |
+| `SUPER + Print`                | Screenshot (area)       |
+| `SUPER + F1`                   | Keybindings cheatsheet  |
 
 ## Theme System
 
