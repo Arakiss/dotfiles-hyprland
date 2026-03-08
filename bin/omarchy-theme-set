@@ -184,12 +184,13 @@ apply_theme() {
     # Set wallpaper if theme has backgrounds
     if [[ -d "$theme_dir/backgrounds" ]]; then
         local wallpaper
-        wallpaper=$(find "$theme_dir/backgrounds" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) | shuf -n 1)
+        wallpaper=$(find "$theme_dir/backgrounds" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" -o -name "*.gif" \) | shuf -n 1)
         if [[ -n "$wallpaper" ]]; then
             ln -sf "$wallpaper" "$HOME/.config/omarchy/current/wallpaper"
-            killall swaybg 2>/dev/null
-            swaybg -m fill -i "$wallpaper" &>/dev/null &
-            disown
+            swww img "$wallpaper" \
+                --transition-type fade \
+                --transition-duration 2 \
+                --transition-fps 60
         fi
     fi
 

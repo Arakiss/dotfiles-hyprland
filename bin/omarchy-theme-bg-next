@@ -12,14 +12,12 @@ TOTAL=${#BACKGROUNDS[@]}
 
 if (( TOTAL == 0 )); then
   notify-send "No background was found for theme" -t 2000
-  pkill -x swaybg
-  setsid uwsm-app -- swaybg --color '#000000' >/dev/null 2>&1 &
+  swww clear 000000
 else
   # Get current background from symlink
   if [[ -L $CURRENT_BACKGROUND_LINK ]]; then
     CURRENT_BACKGROUND=$(readlink "$CURRENT_BACKGROUND_LINK")
   else
-    # Default to first background if no symlink exists
     CURRENT_BACKGROUND=""
   fi
 
@@ -34,7 +32,6 @@ else
 
   # Get next background (wrap around)
   if (( INDEX == -1 )); then
-    # Use the first background when no match was found
     NEW_BACKGROUND="${BACKGROUNDS[0]}"
   else
     NEXT_INDEX=$(((INDEX + 1) % TOTAL))
@@ -44,7 +41,12 @@ else
   # Set new background symlink
   ln -nsf "$NEW_BACKGROUND" "$CURRENT_BACKGROUND_LINK"
 
-  # Relaunch swaybg
-  pkill -x swaybg
-  setsid uwsm-app -- swaybg -i "$CURRENT_BACKGROUND_LINK" -m fill >/dev/null 2>&1 &
+  # Apply with swww transition
+  transitions=(fade wipe wave grow center)
+  transition="${transitions[$((RANDOM % ${#transitions[@]}))]}"
+
+  swww img "$NEW_BACKGROUND" \
+      --transition-type "$transition" \
+      --transition-duration 2 \
+      --transition-fps 60
 fi

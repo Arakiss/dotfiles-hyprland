@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Cycle to next wallpaper in current theme
+# Cycle to next wallpaper in current theme (with swww transition)
 
 CURRENT_THEME=$(cat "$HOME/.config/omarchy/current-theme" 2>/dev/null || echo "tokyo-night")
 THEME_DIR="$HOME/.dotfiles/themes/$CURRENT_THEME"
@@ -12,7 +12,7 @@ for dir in "$THEME_DIR/backgrounds" "$CUSTOM_BG_DIR"; do
     if [[ -d "$dir" ]]; then
         while IFS= read -r -d '' file; do
             wallpapers+=("$file")
-        done < <(find "$dir" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) -print0)
+        done < <(find "$dir" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" -o -name "*.gif" \) -print0)
     fi
 done
 
@@ -32,11 +32,17 @@ while true; do
     ((attempts++))
 done
 
-# Apply
+# Apply with transition
 mkdir -p "$(dirname "$CURRENT_WP_LINK")"
 ln -sf "$wallpaper" "$CURRENT_WP_LINK"
-killall swaybg 2>/dev/null
-swaybg -m fill -i "$wallpaper" &>/dev/null &
-disown
+
+# Pick a random transition for variety
+transitions=(fade wipe wave grow center any)
+transition="${transitions[$((RANDOM % ${#transitions[@]}))]}"
+
+swww img "$wallpaper" \
+    --transition-type "$transition" \
+    --transition-duration 2 \
+    --transition-fps 60
 
 notify-send "Wallpaper" "$(basename "$wallpaper")" -t 2000

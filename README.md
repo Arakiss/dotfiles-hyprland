@@ -12,7 +12,7 @@ A curated, modular desktop environment built around the Tokyo Night aesthetic wi
 - **Modular Hyprland config** — split into bindings, input, look-and-feel, apps, autostart, and environment files
 - **95+ utility scripts** — system toggles, app launchers, restart helpers, package management, and theme tools
 - **Dual-monitor setup** with machine-specific config separation (local overrides stay out of the repo)
-- **Wayland-native stack** — swaybg, grim+slurp, cliphist, swaync, hyprlock, hypridle, swayosd
+- **Wayland-native stack** — swww (animated transitions + GIF wallpapers), grim+slurp, cliphist, swaync, hyprlock, hypridle, swayosd
 
 ## Stack
 
@@ -92,7 +92,7 @@ A curated, modular desktop environment built around the Tokyo Night aesthetic wi
 ```bash
 paru -S --needed \
   hyprland hyprlock hypridle hyprsunset hyprpicker xdg-desktop-portal-hyprland \
-  waybar swaync rofi-wayland swaybg swayosd-git \
+  waybar swaync rofi-wayland swww swayosd-git \
   ghostty alacritty \
   grim slurp satty wl-clipboard cliphist \
   zsh starship zoxide fzf zsh-autosuggestions zsh-syntax-highlighting \

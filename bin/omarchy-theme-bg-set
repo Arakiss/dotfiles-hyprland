@@ -13,6 +13,8 @@ CURRENT_BACKGROUND_LINK="$HOME/.config/omarchy/current/background"
 # Create symlink to the new background
 ln -nsf "$BACKGROUND" "$CURRENT_BACKGROUND_LINK"
 
-# Kill existing swaybg and start new one
-pkill -x swaybg
-setsid uwsm-app -- swaybg -i "$CURRENT_BACKGROUND_LINK" -m fill >/dev/null 2>&1 &
+# Apply with swww transition
+swww img "$BACKGROUND" \
+    --transition-type fade \
+    --transition-duration 2 \
+    --transition-fps 60
