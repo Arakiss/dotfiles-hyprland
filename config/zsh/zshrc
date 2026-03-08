@@ -72,6 +72,10 @@ if command -v dust &>/dev/null; then
     alias du='dust'
 fi
 
+if command -v procs &>/dev/null; then
+    alias ps='procs'
+fi
+
 # Navigation
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -121,6 +125,21 @@ fi
 # Starship prompt
 if command -v starship &>/dev/null; then
     eval "$(starship init zsh)"
+fi
+
+# Yazi file manager — cd into navigated dir on quit
+function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+}
+
+# Direnv — auto-load .envrc per directory
+if command -v direnv &>/dev/null; then
+    eval "$(direnv hook zsh)"
 fi
 
 # Fastfetch on first shell
