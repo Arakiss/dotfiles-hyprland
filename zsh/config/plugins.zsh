@@ -6,6 +6,9 @@ export ZSH="$HOME/.oh-my-zsh"
 # Theme disabled - using Starship instead
 # ZSH_THEME="robbyrussell"
 
+# Docker CLI completions (must be added to fpath BEFORE compinit)
+fpath=($HOME/.docker/completions $fpath)
+
 # Plugins: Only built-in (external ones loaded in tools/init.zsh)
 plugins=(
   git                 # Git aliases (ga, gco, gp, etc.)
@@ -20,6 +23,3 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
-
-# Docker CLI completions (compinit already called by oh-my-zsh)
-fpath=($HOME/.docker/completions $fpath)

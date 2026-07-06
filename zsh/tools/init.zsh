@@ -45,10 +45,11 @@ eval "$(starship init zsh)"
 # Only initialize when mise/python/ruby/etc is called
 if command -v mise &>/dev/null; then
     _lazy_mise_init() {
+        unfunction _lazy_mise_init 2>/dev/null
+        unfunction mise python python3 ruby 2>/dev/null
         eval "$(mise activate zsh)"
     }
     _lazy_load "mise" "_lazy_mise_init"
-    # Also trigger for common commands managed by mise
     _lazy_load "python" "_lazy_mise_init"
     _lazy_load "python3" "_lazy_mise_init"
     _lazy_load "ruby" "_lazy_mise_init"
