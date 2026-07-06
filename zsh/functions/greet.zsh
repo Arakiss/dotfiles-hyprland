@@ -44,9 +44,10 @@ night-city-greet() {
     (( hour >= 14 && hour < 21 )) && salute="Buenas tardes"
     local stamp="$(date '+%A · %H:%M')"
 
-    # Glitched header: one random char of the title flips to a block in cyan
+    # Glitched header: one random INNER char flips to a block in cyan.
+    # Never the first/last letter — a glitched edge reads as breakage, not style.
     local title="NIGHT CITY" glitched="" i
-    local gpos=$((RANDOM % ${#title} + 1))
+    local gpos=$((RANDOM % (${#title} - 2) + 2))
     local -a blocks=('▓' '▒' '█' '░')
     for (( i = 1; i <= ${#title}; i++ )); do
         if (( i == gpos )) && [[ "${title[i]}" != " " ]]; then
@@ -59,7 +60,8 @@ night-city-greet() {
     # Quote in default fg + italic (never a palette gray: some themes render
     # color 8 near-invisible on dark backgrounds — field-tested 2026-07-06)
     print -P ""
-    print -P "  %F{yellow}%B▌${glitched}%b%f  %F{cyan}${salute}, choom.%f  %F{8}${stamp}%f"
+    # Timestamp in explicit mid-gray (256c 245): palette-8 grays vary by theme
+    print -P "  %F{yellow}%B▌${glitched}%b%f  %F{cyan}${salute}, choom.%f  %{\e[38;5;245m%}${stamp}%{\e[0m%}"
     print    "  \e[3m\"${text}\"\e[23m \e[36m— ${author}\e[0m"
     print -P ""
 }
