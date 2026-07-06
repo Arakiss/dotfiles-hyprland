@@ -1,22 +1,24 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Starship prompt — flat & theme-adaptive (reworked 2026-07-06).
+# Starship prompt — two-line "lean" frame, theme-adaptive (reworked 2026-07-06).
 # Design rules:
-#   - No powerline bubble segments: they rendered as color blobs and aged badly.
-#   - ANSI named colors ONLY (cyan, yellow, purple…): the prompt inherits the
-#     active terminal theme, so it re-skins itself with `vibe` (cyberpunk2077
-#     maps yellow→#fcee0a, sober/TokyoNight maps its own) — zero config drift.
-#   - The random-quote module is out of the prompt (still runnable as
-#     `random-quote`); re-enable by adding $custom back to format.
-#   - Last-login banner is suppressed via ~/.hushlogin, not here.
+#   - Two lines with box-drawing corners (╭─ … ╰─❯): structure and character
+#     WITHOUT powerline bubbles (which aged into color blobs). Box glyphs render
+#     in any mono font, so no emoji-fallback risk.
+#   - ANSI named colors ONLY: the prompt inherits the active terminal theme and
+#     re-skins itself with `vibe` (cyberpunk2077 → yellow #fcee0a, etc.).
+#   - Language modules use text labels, not Nerd Font glyphs (those fell back to
+#     color emoji on some fonts). $nodejs is off when $bun is present (redundant).
+#   - Right side (versions + duration) is dim, pushed to the edge with $fill.
+#   - Random quote runnable as `random-quote`; last-login hushed via ~/.hushlogin.
 
 format = """
 $directory\
 $git_branch\
 $git_status\
 $git_state\
+$fill\
 $bun\
-$nodejs\
 $python\
 $rust\
 $golang\
@@ -26,39 +28,46 @@ $line_break\
 $character"""
 
 right_format = ""
-continuation_prompt = '[❯❯ ](dim)'
+continuation_prompt = '[▶ ](dim)'
 add_newline = true
+
+[fill]
+symbol = " "
 
 # ══════════════════════════════════════════════════════════════════════════════
 # CORE
 # ══════════════════════════════════════════════════════════════════════════════
 
+# Folder icon is FontAwesome  (U+F07B, BMP PUA) — that range renders reliably;
+# the emoji-fallback problem was the high Material-Design plane (U+F0000+).
 [directory]
 style = "bold cyan"
-format = "[$path]($style)[$read_only](red) "
+format = "[ $path]($style)[$read_only](red) "
 truncation_length = 2
 truncate_to_repo = true
-read_only = " 󰌾"
+read_only = " "
 
 [git_branch]
 symbol = ""
 style = "purple"
-format = '[$symbol $branch]($style) '
+format = '[on](dim) [$symbol $branch]($style) '
 truncation_length = 20
 
+# Status markers use safe Unicode (arrows/symbols), NOT Material-Design NF glyphs
+# — the latter fall back to color emoji on some fonts (the lesson from the icons).
 [git_status]
 style = "yellow"
 format = '([$all_status$ahead_behind]($style) )'
-ahead = "󰜸$count "
-behind = "󰜯$count "
-diverged = "󰃻 "
-conflicted = " "
+ahead = "↑$count "
+behind = "↓$count "
+diverged = "↕ "
+conflicted = "✖$count "
 untracked = "?$count "
-stashed = "󰆓 "
+stashed = "≡ "
 modified = "~$count "
 staged = "+$count "
-renamed = "󰑕 "
-deleted = "󰆴$count "
+renamed = "»$count "
+deleted = "✘$count "
 
 [git_state]
 style = "bold red"
@@ -82,12 +91,13 @@ style = "dimmed white"
 format = '[$symbol $version]($style) '
 detect_files = ["bun.lockb", "bun.lock", "bunfig.toml"]
 
+# node only in node-explicit projects: package.json alone is also a Bun project,
+# so showing both bun+node is redundant (the screenshot's "bun … node …" noise).
 [nodejs]
 symbol = "node"
 style = "dimmed white"
 format = '[$symbol $version]($style) '
-detect_files = ["package.json", ".nvmrc", ".node-version"]
-detect_folders = ["node_modules"]
+detect_files = [".nvmrc", ".node-version"]
 
 [python]
 symbol = "py"
