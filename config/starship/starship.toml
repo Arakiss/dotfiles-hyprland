@@ -15,7 +15,6 @@ $directory\
 $git_branch\
 $git_status\
 $git_state\
-$package\
 $bun\
 $nodejs\
 $python\
@@ -70,49 +69,47 @@ commit_hash_length = 7
 tag_symbol = '  '
 
 # ══════════════════════════════════════════════════════════════════════════════
-# LANGUAGES — dim, symbol + version, only when the project uses them
+# LANGUAGES — text labels, not Nerd Font glyphs.
+# Rationale (2026-07-06): Material-Design NF glyphs (package 󰏗, rust 󱘗) are NOT
+# in Monaspace Neon and fell back to COLOR EMOJI (🌐/🦀), breaking the monochrome
+# terminal. Lowercase text labels render in any font and read cleanly. `package`
+# dropped: it duplicated the language version (crate/pkg vs toolchain).
 # ══════════════════════════════════════════════════════════════════════════════
 
-[package]
-symbol = "󰏗"
-style = "dimmed white"
-format = '[$symbol $version]($style) '
-display_private = true
-
 [bun]
-symbol = ""
+symbol = "bun"
 style = "dimmed white"
 format = '[$symbol $version]($style) '
 detect_files = ["bun.lockb", "bun.lock", "bunfig.toml"]
 
 [nodejs]
-symbol = ""
+symbol = "node"
 style = "dimmed white"
 format = '[$symbol $version]($style) '
 detect_files = ["package.json", ".nvmrc", ".node-version"]
 detect_folders = ["node_modules"]
 
 [python]
-symbol = ""
+symbol = "py"
 style = "dimmed white"
 format = '[$symbol $version]($style) '
 detect_files = ["requirements.txt", "pyproject.toml", "Pipfile", ".python-version"]
 detect_extensions = ["py"]
 
 [rust]
-symbol = "󱘗"
+symbol = "rust"
 style = "dimmed white"
 format = '[$symbol $version]($style) '
 detect_files = ["Cargo.toml"]
 
 [golang]
-symbol = ""
+symbol = "go"
 style = "dimmed white"
 format = '[$symbol $version]($style) '
 detect_files = ["go.mod", "go.sum"]
 
 [docker_context]
-symbol = ""
+symbol = "docker"
 style = "dimmed white"
 format = '[$symbol $context]($style) '
 only_with_files = true
