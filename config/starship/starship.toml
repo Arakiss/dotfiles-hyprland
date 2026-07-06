@@ -1,9 +1,20 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# Starship prompt — flat & theme-adaptive (reworked 2026-07-06).
+# Design rules:
+#   - No powerline bubble segments: they rendered as color blobs and aged badly.
+#   - ANSI named colors ONLY (cyan, yellow, purple…): the prompt inherits the
+#     active terminal theme, so it re-skins itself with `vibe` (cyberpunk2077
+#     maps yellow→#fcee0a, sober/TokyoNight maps its own) — zero config drift.
+#   - The random-quote module is out of the prompt (still runnable as
+#     `random-quote`); re-enable by adding $custom back to format.
+#   - Last-login banner is suppressed via ~/.hushlogin, not here.
+
 format = """
-[](mauve)\
 $directory\
-[](fg:mauve bg:lavender)\
+$git_branch\
+$git_status\
+$git_state\
 $package\
 $bun\
 $nodejs\
@@ -11,66 +22,34 @@ $python\
 $rust\
 $golang\
 $docker_context\
-[](fg:lavender bg:teal)\
-$git_branch\
-$git_status\
-[ ](fg:teal)\
-$fill\
-$custom\
+$cmd_duration\
 $line_break\
 $character"""
 
 right_format = ""
-continuation_prompt = '▶▶ '
-palette = 'catppuccin_mocha'
+continuation_prompt = '[❯❯ ](dim)'
 add_newline = true
-
-# ══════════════════════════════════════════════════════════════════════════════
-# CUSTOM - Random Quotes
-# ══════════════════════════════════════════════════════════════════════════════
-
-[custom.quote]
-command = "~/.local/bin/random-quote"
-when = true
-format = "[  $output]($style)"
-style = "italic fg:overlay1"
-disabled = false
 
 # ══════════════════════════════════════════════════════════════════════════════
 # CORE
 # ══════════════════════════════════════════════════════════════════════════════
 
-[fill]
-symbol = " "
-
 [directory]
-style = "bg:mauve fg:crust"
-format = "[ $path ]($style)"
-truncation_length = 1
+style = "bold cyan"
+format = "[$path]($style)[$read_only](red) "
+truncation_length = 2
 truncate_to_repo = true
 read_only = " 󰌾"
-read_only_style = "bg:mauve fg:red"
-
-# No substitutions - show real path
-# [directory.substitutions]
-
-# ══════════════════════════════════════════════════════════════════════════════
-# GIT — Nerd Font Icons
-# ══════════════════════════════════════════════════════════════════════════════
 
 [git_branch]
 symbol = ""
-style = "bg:teal"
-format = '[[ $symbol $branch ](fg:crust bg:teal)]($style)'
+style = "purple"
+format = '[$symbol $branch]($style) '
 truncation_length = 20
 
-[git_commit]
-commit_hash_length = 7
-tag_symbol = '  '
-
 [git_status]
-style = "bg:teal"
-format = '[[($all_status$ahead_behind )](fg:crust bg:teal)]($style)'
+style = "yellow"
+format = '([$all_status$ahead_behind]($style) )'
 ahead = "󰜸$count "
 behind = "󰜯$count "
 diverged = "󰃻 "
@@ -83,55 +62,59 @@ renamed = "󰑕 "
 deleted = "󰆴$count "
 
 [git_state]
-style = "bg:red fg:crust bold"
-format = '[[ $state( $progress_current/$progress_total) ](bg:red fg:crust)]($style)'
+style = "bold red"
+format = '[$state( $progress_current/$progress_total)]($style) '
+
+[git_commit]
+commit_hash_length = 7
+tag_symbol = '  '
 
 # ══════════════════════════════════════════════════════════════════════════════
-# LANGUAGES — Official Nerd Font Symbols
+# LANGUAGES — dim, symbol + version, only when the project uses them
 # ══════════════════════════════════════════════════════════════════════════════
 
 [package]
 symbol = "󰏗"
-style = "bg:lavender"
-format = '[[ $symbol $version ](fg:crust bg:lavender)]($style)'
+style = "dimmed white"
+format = '[$symbol $version]($style) '
 display_private = true
 
 [bun]
 symbol = ""
-style = "bg:lavender"
-format = '[[ $symbol $version ](fg:crust bg:lavender)]($style)'
+style = "dimmed white"
+format = '[$symbol $version]($style) '
 detect_files = ["bun.lockb", "bun.lock", "bunfig.toml"]
 
 [nodejs]
 symbol = ""
-style = "bg:lavender"
-format = '[[ $symbol $version ](fg:crust bg:lavender)]($style)'
+style = "dimmed white"
+format = '[$symbol $version]($style) '
 detect_files = ["package.json", ".nvmrc", ".node-version"]
 detect_folders = ["node_modules"]
 
 [python]
 symbol = ""
-style = "bg:lavender"
-format = '[[ $symbol $version ](fg:crust bg:lavender)]($style)'
+style = "dimmed white"
+format = '[$symbol $version]($style) '
 detect_files = ["requirements.txt", "pyproject.toml", "Pipfile", ".python-version"]
 detect_extensions = ["py"]
 
 [rust]
 symbol = "󱘗"
-style = "bg:lavender"
-format = '[[ $symbol $version ](fg:crust bg:lavender)]($style)'
+style = "dimmed white"
+format = '[$symbol $version]($style) '
 detect_files = ["Cargo.toml"]
 
 [golang]
 symbol = ""
-style = "bg:lavender"
-format = '[[ $symbol $version ](fg:crust bg:lavender)]($style)'
+style = "dimmed white"
+format = '[$symbol $version]($style) '
 detect_files = ["go.mod", "go.sum"]
 
 [docker_context]
 symbol = ""
-style = "bg:lavender"
-format = '[[ $symbol $context ](fg:crust bg:lavender)]($style)'
+style = "dimmed white"
+format = '[$symbol $context]($style) '
 only_with_files = true
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -140,47 +123,26 @@ only_with_files = true
 
 [cmd_duration]
 min_time = 500
-format = "[ 󱎫 $duration ](fg:yellow)"
+format = "[󱎫 $duration](yellow) "
 show_milliseconds = false
 
 [line_break]
 disabled = false
 
 [character]
-success_symbol = '[❯](bold fg:green)'
-error_symbol = '[❯](bold fg:red)'
-vimcmd_symbol = '[❮](bold fg:green)'
-vimcmd_replace_symbol = '[❮](bold fg:lavender)'
-vimcmd_visual_symbol = '[❮](bold fg:yellow)'
+success_symbol = '[❯](bold yellow)'
+error_symbol = '[❯](bold red)'
+vimcmd_symbol = '[❮](bold green)'
+vimcmd_replace_symbol = '[❮](bold purple)'
+vimcmd_visual_symbol = '[❮](bold yellow)'
 
 # ══════════════════════════════════════════════════════════════════════════════
-# CATPPUCCIN MOCHA PALETTE
+# PARKED — random quote (out of the prompt; run `random-quote` manually)
 # ══════════════════════════════════════════════════════════════════════════════
 
-[palettes.catppuccin_mocha]
-rosewater = "#f5e0dc"
-flamingo = "#f2cdcd"
-pink = "#f5c2e7"
-mauve = "#cba6f7"
-red = "#f38ba8"
-maroon = "#eba0ac"
-peach = "#fab387"
-yellow = "#f9e2af"
-green = "#a6e3a1"
-teal = "#94e2d5"
-sky = "#89dceb"
-sapphire = "#74c7ec"
-blue = "#89b4fa"
-lavender = "#b4befe"
-text = "#cdd6f4"
-subtext1 = "#bac2de"
-subtext0 = "#a6adc8"
-overlay2 = "#9399b2"
-overlay1 = "#7f849c"
-overlay0 = "#6c7086"
-surface2 = "#585b70"
-surface1 = "#45475a"
-surface0 = "#313244"
-base = "#1e1e2e"
-mantle = "#181825"
-crust = "#11111b"
+[custom.quote]
+command = "~/.local/bin/random-quote"
+when = true
+format = "[  $output]($style)"
+style = "italic dimmed white"
+disabled = true
