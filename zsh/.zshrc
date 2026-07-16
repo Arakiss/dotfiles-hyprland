@@ -73,6 +73,9 @@ export PATH="$HOME/bin:$HOME/.bun/bin:$PATH"
 # Hermes Agent — ensure ~/.local/bin is on PATH
 export PATH="$HOME/.local/bin:$PATH"
 
+# Keep the fnm-selected Node ahead of tool-owned ~/.local/bin shims.
+command -v fnm &>/dev/null && eval "$(fnm env --use-on-cd --shell zsh)"
+
 # goal-loop helper (autonomous goal-loop, Stop hook + local MLX judge)
 export PATH="$HOME/.claude/bin:$PATH"
 
